@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{virgiling-slides}[2026/09/04 v2.0 Virgiling academic slides]
+\ProvidesClass{virgiling-slides}[2026/09/04 v2.4 Virgiling academic slides]
 
 % Forward unknown options to Beamer and top-align frame content by default.
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{beamer}}
@@ -35,6 +35,29 @@
   Scale=MatchLowercase
 ]
 
+\RequirePackage{listings}
+\lstdefinestyle{virgiling}{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{structure.fg}\bfseries,
+  commentstyle=\color{normal text.fg!55}\itshape,
+  stringstyle=\color{example text.fg},
+  numberstyle=\tiny\color{normal text.fg!45},
+  backgroundcolor=\color{normal text.fg!3},
+  rulecolor=\color{structure.fg!30},
+  frame=single,
+  framesep=5pt,
+  framerule=.4pt,
+  numbersep=7pt,
+  showstringspaces=false,
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  tabsize=2,
+  aboveskip=.4\baselineskip,
+  belowskip=.25\baselineskip
+}
+\lstset{style=virgiling}
+
 % Visual theme and page geometry
 \mode<presentation>{
   \useinnertheme[shadow=false]{rounded}
@@ -43,12 +66,26 @@
   \useoutertheme[subsection=true]{smoothbars}
 }
 
+\definecolor{VirgilingBlue}{HTML}{015CAD}
+\definecolor{VirgilingCyan}{HTML}{003865}
+\colorlet{VirgilingBlueSoft}{VirgilingBlue!88!white}
+\colorlet{VirgilingBluePale}{VirgilingBlue!7!white}
+\colorlet{VirgilingCyanDeep}{VirgilingCyan!92!black}
+
+\setbeamercolor{structure}{fg=VirgilingBlue}
+\setbeamercolor*{palette primary}{fg=white,bg=VirgilingBlue}
+\setbeamercolor*{palette secondary}{fg=white,bg=VirgilingBlueSoft}
+\setbeamercolor*{palette tertiary}{fg=white,bg=VirgilingCyan}
+\setbeamercolor*{palette quaternary}{fg=white,bg=black!88}
+\setbeamercolor{block title}{fg=white,bg=VirgilingBlueSoft}
+\setbeamercolor{block body}{parent=normal text,bg=VirgilingBluePale}
+
 \setbeamertemplate{navigation symbols}{}
 \setbeamersize{
   text margin left=7mm,
   text margin right=7mm,
-  mini frame size=.095cm,
-  mini frame offset=.025cm
+  mini frame size=.13cm,
+  mini frame offset=.02cm
 }
 
 \setbeamertemplate{items}[square]
@@ -157,9 +194,9 @@
   \insertshortdate\hfill\insertframenumber/\inserttotalframenumber
 }
 
-\setbeamercolor*{author in head/foot}{parent=palette tertiary}
-\setbeamercolor*{title in head/foot}{parent=palette secondary}
-\setbeamercolor*{date in head/foot}{parent=palette primary}
+\setbeamercolor*{author in head/foot}{fg=white,bg=VirgilingCyanDeep}
+\setbeamercolor*{title in head/foot}{fg=white,bg=VirgilingCyanDeep}
+\setbeamercolor*{date in head/foot}{fg=white,bg=VirgilingCyanDeep}
 
 \defbeamertemplate*{footline}{virgiling-slides}{%
   \leavevmode%
@@ -168,8 +205,8 @@
       wd=.32\paperwidth,
       ht=1.8ex,
       dp=.65ex,
-      leftskip=1.2ex,
-      rightskip=1.2ex
+      leftskip=2.4ex,
+      rightskip=2.4ex
     ]{author in head/foot}%
       \usebeamerfont{author in head/foot}\VirgilingFooterLeft
     \end{beamercolorbox}%
@@ -185,8 +222,8 @@
       wd=.26\paperwidth,
       ht=1.8ex,
       dp=.65ex,
-      leftskip=1.2ex,
-      rightskip=1.2ex
+      leftskip=2.4ex,
+      rightskip=2.4ex
     ]{date in head/foot}%
       \usebeamerfont{date in head/foot}\VirgilingFooterRight
     \end{beamercolorbox}%
@@ -194,6 +231,20 @@
   \vskip0pt%
 }
 \setbeamertemplate{footline}[virgiling-slides]
+
+\AtBeginDocument{%
+  \@ifpackageloaded{biblatex}{%
+    \setbeamertemplate{bibliography item}[text]%
+    \setbeamercolor{bibliography item}{fg=black}%
+    \setbeamercolor{bibliography entry author}{fg=black}%
+    \setbeamercolor{bibliography entry title}{fg=black}%
+    \setbeamercolor{bibliography entry location}{fg=black}%
+    \setbeamercolor{bibliography entry note}{fg=black}%
+    \renewcommand*{\bibfont}{\scriptsize}%
+    \setlength{\bibitemsep}{.45\baselineskip}%
+    \AtEveryBibitem{\color{black}}%
+  }{}%
+}
 
 % Convenience commands
 \newcommand{\VirgilingTitleFrame}{%

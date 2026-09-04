@@ -4,7 +4,23 @@
 \usepackage{mathtools}
 \usepackage{booktabs}
 \usepackage{tikz}
+\usepackage[
+  backend=bibtex,
+  style=alphabetic,
+  sorting=none,
+  giveninits=true,
+  maxalphanames=3,
+  minalphanames=3,
+  maxbibnames=3,
+  minbibnames=3,
+  doi=false,
+  isbn=false,
+  url=false,
+  eprint=false
+]{biblatex}
 \usetikzlibrary{arrows.meta,positioning}
+\addbibresource{references.bib}
+\DeclareFieldFormat[inproceedings]{booktitle}{\textcolor{black!55}{\mkbibemph{#1}}}
 
 % Short values in brackets are used in the footer.
 \title[Presentation Title]{A Complete Example Presentation}
@@ -213,24 +229,25 @@
 
 \subsection{Code}
 
-% Verbatim content requires the standard Beamer `fragile` frame option.
 \begin{frame}[fragile]{Code and Monospace Text}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.59\textwidth}
-      \begin{block}{Plain verbatim}
-\begin{verbatim}
+\begin{lstlisting}[language=Python,numbers=left]
 def normalize(values):
+    # Return a normalized copy.
+    if not values:
+        raise ValueError("empty input")
     total = sum(values)
     return [value / total for value in values]
-\end{verbatim}
-      \end{block}
+\end{lstlisting}
     \end{column}
     \begin{column}{0.36\textwidth}
-      MD IO is applied automatically to:
+      The \texttt{virgiling} listings style provides:
       \begin{itemize}
-        \item \texttt{inline code}
-        \item \texttt{verbatim} blocks
-        \item file names and commands
+        \item language-aware syntax colors;
+        \item optional line numbers;
+        \item automatic line wrapping;
+        \item MD IO throughout.
       \end{itemize}
     \end{column}
   \end{columns}
@@ -264,7 +281,7 @@ def normalize(values):
   Standard Beamer and Hyperref commands remain available:
   \begin{itemize}
     \item External link: \href{https://ctan.org/pkg/beamer}{Beamer on CTAN}.
-    \item Manual citation: the class builds on Beamer's presentation model~\cite{beamer}.
+    \item Alphabetic citations: one author gives \cite{lamport1994latex}; a larger team gives \cite{vaswani2017attention}.
     \item Footnote: use footnotes for qualifications that should remain visible.\footnote{Keep footnotes short enough to read during the talk.}
     \item Internal navigation: jump to supporting material without changing the main flow.
   \end{itemize}
@@ -314,14 +331,8 @@ def normalize(values):
 
 \subsection{References}
 
-% For a long bibliography, add the `allowframebreaks` frame option.
 \begin{frame}{References}
-  \begin{thebibliography}{9}
-    \bibitem{beamer}
-      The Beamer Project.
-      \newblock \emph{The beamer class user guide}.
-      \newblock \url{https://ctan.org/pkg/beamer}.
-  \end{thebibliography}
+  \printbibliography[heading=none]
 \end{frame}
 
 \end{document}
