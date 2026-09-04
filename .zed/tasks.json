@@ -1,0 +1,13 @@
+[
+  {
+    "label": "LaTeX: Tectonic + Skim",
+    "command": "mkdir -p build && tectonic -X compile \"$ZED_FILENAME\" --outdir build --keep-logs --keep-intermediates --synctex && /Applications/Skim.app/Contents/SharedSupport/displayline -r -z -b $ZED_ROW \"build/$ZED_STEM.pdf\"",
+    "cwd": "$ZED_DIRNAME",
+    "tags": ["latex-build"],
+    "save": "current",
+    "allow_concurrent_runs": false,
+    "use_new_terminal": false,
+    "reveal": "no_focus",
+    "hide": "on_success",
+  },
+]
