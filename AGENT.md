@@ -18,7 +18,7 @@ Maintain the reusable Beamer class, its self-contained example, and the Zed buil
 - Keep the class name `virgiling-slides`.
 - Keep the structural palette anchored to `VirgilingBlue` (`#015CAD`) and `VirgilingCyan` (`#003865`).
 - Use Linux Biolinum for text, Cambria Math for mathematics, and MD IO for monospaced content.
-- Resolve Cambria Math and MD IO from installed system fonts. Do not add font copies, symlinks, or setup scripts.
+- Resolve Linux Biolinum, Cambria Math, and MD IO from installed system fonts. Do not add font copies, downloads, symlinks, or setup scripts.
 - Keep title-page navigation empty.
 - Keep the main top-navigation band black; reserve `VirgilingCyan` for the footer family.
 - On content frames, show section names and progress dots in the upper bar; keep the lower bar free of subsection text.

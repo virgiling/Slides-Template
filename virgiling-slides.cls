@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{virgiling-slides}[2026/09/04 v2.4 Virgiling academic slides]
+\ProvidesClass{virgiling-slides}[2026/09/05 v2.5 Virgiling academic slides]
 
 % Forward unknown options to Beamer and top-align frame content by default.
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{beamer}}
@@ -11,7 +11,7 @@
 \ifPDFTeX
   \ClassError{virgiling-slides}
     {virgiling-slides requires Tectonic or XeLaTeX}
-    {Cambria Math and MD IO are OpenType fonts. Compile with Tectonic or XeLaTeX.}
+    {The template uses system OpenType fonts. Compile with Tectonic or XeLaTeX.}
 \fi
 
 \RequirePackage{fontspec}
@@ -19,14 +19,15 @@
 \RequirePackage{unicode-math}
 \usefonttheme{professionalfonts}
 
-\setsansfont{LinBiolinum_R.otf}[
-  BoldFont=LinBiolinum_RB.otf,
-  ItalicFont=LinBiolinum_RI.otf,
-  BoldItalicFont=LinBiolinum_RBO.otf,
+\setsansfont{Linux Biolinum}[
+  BoldFont={Linux Biolinum Bold},
+  ItalicFont={Linux Biolinum Italic},
+  BoldItalicFont={Linux Biolinum Bold},
+  BoldItalicFeatures={FakeSlant=.2},
   Ligatures=TeX
 ]
 
-% Cambria Math and MD IO are resolved from system fonts.
+% Presentation fonts are resolved from the system font library.
 \setmathfont{Cambria Math}
 \setmonofont{MD IO}[
   BoldFont={MD IO Bold},

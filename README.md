@@ -19,11 +19,12 @@
 ## 环境要求
 
 - Tectonic
+- Linux Biolinum：Regular、Bold、Italic
 - Cambria Math
 - MD IO：Regular、Bold、Italic、Bold Italic
 - Skim，用于 Zed 编译后的 PDF 定位与刷新
 
-Linux Biolinum 正文字体由 Tectonic 的 TeX 资源包提供。Cambria Math 和 MD IO 直接从系统字体库加载，不需要复制字体或运行初始化脚本。
+Linux Biolinum、Cambria Math 和 MD IO 均直接从系统字体库加载，不需要复制字体、下载字体或运行初始化脚本。Linux Biolinum 没有独立 Bold Italic 时，模板只对系统 Bold 字体合成斜体形态。
 
 Tectonic 读取系统字体时可能输出：
 
