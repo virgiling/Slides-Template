@@ -6,6 +6,9 @@
 \ProcessOptions\relax
 \LoadClass[t]{beamer}
 
+% Use the compilation date by default; a later \date command overrides it.
+\date[\the\year]{\today}
+
 % Typography
 \RequirePackage{iftex}
 \ifPDFTeX
@@ -153,6 +156,8 @@
   \vbox{}%
   \vfill%
   \begin{centering}%
+    % Center the rounded box itself, not only its contents.
+    \leavevmode%
     \begin{beamercolorbox}[
       wd=.88\paperwidth,
       sep=.85em,

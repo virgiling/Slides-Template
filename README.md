@@ -78,7 +78,7 @@ tectonic -X compile example.tex \
 \subtitle{Optional Subtitle}
 \author[Your Name]{Your Name}
 \institute[Institution]{Department or Research Group\\Institution}
-\date[Event 2026]{Event or Seminar Name\\Month 2026}
+% Date and footer year default to the compilation date.
 
 \begin{document}
 
@@ -116,6 +116,24 @@ tectonic -X compile example.tex \
 ```
 
 标题页保留顶部色带和页脚，但不显示 section 名称或进度圆点。
+
+### 日期
+
+默认无需填写 `\date`：标题页显示编译当天的日期，页脚显示当前年份。类文件内置的设置是：
+
+```latex
+\date[\the\year]{\today}
+```
+
+`\today` 使用 LaTeX 的日期格式，默认英文示例为 `September 7, 2026`；`\the\year` 输出年份。日期在重新编译时更新，打开已有 PDF 不会更新。
+
+如需固定报告日期，仍可在导言区覆盖默认值：
+
+```latex
+\date[2026]{05 Sept. 2026}
+```
+
+使用 `\date{}` 可隐藏标题页和页脚的日期。
 
 ### 总目录
 
