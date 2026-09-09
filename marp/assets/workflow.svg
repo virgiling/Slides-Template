@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="560" viewBox="0 0 440 560" role="img" aria-labelledby="title">
+<title id="title">Markdown to HTML workflow</title>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L0 6L9 3Z" fill="#015cad"/></marker></defs>
+<g fill="#f0f5fa" stroke="#015cad" stroke-width="3"><rect x="60" y="55" width="320" height="110" rx="12"/><rect x="60" y="225" width="320" height="110" rx="12"/><rect x="60" y="395" width="320" height="110" rx="12"/></g>
+<g font-family="sans-serif" font-size="30" fill="#003865" text-anchor="middle"><text x="220" y="121">Markdown</text><text x="220" y="291">Marp CLI</text><text x="220" y="461">HTML</text></g>
+<g stroke="#015cad" stroke-width="3" marker-end="url(#arrow)"><path d="M220 175V211"/><path d="M220 345V381"/></g>
+</svg>

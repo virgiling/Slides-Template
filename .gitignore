@@ -16,5 +16,20 @@ build/
 *.vrb
 *.xdv
 
+# JavaScript dependencies and caches
+node_modules/
+.cache/
+
+# Private agent state and credentials: never copy into generated projects
+.claude/
+.pi/
+sessions/
+logs/
+.env
+.env.*
+*.sqlite
+*.sqlite-*
+*.db
+
 # macOS
 .DS_Store

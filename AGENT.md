@@ -1,69 +1,35 @@
-# AGENT.md
+# Template Repository Instructions
 
-## Scope
+## Routing
 
-Maintain the reusable Beamer class, its self-contained example, and the Zed build task in this directory.
+This is an independent template Git repository, not a collection of talks.
 
-## Source files
+- `latex/`: formal Beamer/PDF slides. Read `latex/AGENT.md` and `latex/README.md` before using or changing it.
+- `marp/`: a reusable CSS theme plus a Markdown example for informal talks. Read `marp/AGENT.md` and `marp/README.md` before using or changing it.
+- Read `README.md` to choose a template. Do not force Markdown-to-LaTeX conversion or change a talk's format without asking.
+- The surrounding `../scripts/slides` and `../Makefile`, when present, manage talk copies. They are outside this repository; preserve that boundary.
 
-- `virgiling-slides.cls`: template implementation and public commands.
-- `example.tex`: neutral, compilable feature reference.
-- `references.bib`: compact example bibliography used by `example.tex`.
-- `.zed/tasks.json`: supported editor build workflow.
-- `README.md`: user-facing usage documentation.
-- `build/`: ignored generated output; never treat it as source.
+## Shared rules
 
-## Invariants
+- Keep the only template `.gitignore` here at the repository root. It covers both subdirectories. Keep `LICENSE.txt` here too.
+- Each template README must show a local thumbnail and runnable commands. Keep the root routing table and previews synchronized.
+- `thumbnail.png` must show the actual compiled cover. Never replace it with a drawn illustration. Use the outer workspace's `make thumbnails`, or native PDF/Marp first-page export.
+- This repository must not contain `scripts/`, Node dependencies, tests or per-talk application scaffolds. Shared tooling belongs to the outer slides workspace.
+- Runtime artifacts belong in ignored `build/`; checked-in cover PNGs are the intentional documentation exception.
+- Never read or copy sessions, `.claude/`, `.pi/`, private logs, databases, credentials, or environment files. Copy only explicit source-file allowlists into new talks, not entire directories.
+- Do not read private build outputs from unrelated projects. Logs created by the current compile may be checked for errors.
 
-- Keep the class name `virgiling-slides`.
-- Keep the structural palette anchored to `VirgilingBlue` (`#015CAD`) and `VirgilingCyan` (`#003865`).
-- Use Linux Biolinum for text, Cambria Math for mathematics, and MD IO for monospaced content.
-- Resolve Linux Biolinum, Cambria Math, and MD IO from installed system fonts. Do not add font copies, downloads, symlinks, or setup scripts.
-- Keep title-page navigation empty.
-- Keep the main top-navigation band black; reserve `VirgilingCyan` for the footer family.
-- On content frames, show section names and progress dots in the upper bar; keep the lower bar free of subsection text.
-- Keep visible spacing between adjacent progress dots; the mini-frame advance must exceed the rendered dot diameter.
-- Keep all three footer cells in the same slightly darkened `VirgilingCyan` and preserve comfortable padding at the outer edges.
-- Keep unordered and ordered list markers square.
-- Keep the default `listings` style compatible with MD IO and the existing Beamer palette.
-- Keep BibLaTeX citations bracketed and alphabetic, using shortened author labels plus two-digit years, with `+` for larger author lists.
-- Keep bibliography text black except for conference names, which are gray and italic.
-- Keep the example independent of files outside this repository and generated source files.
-- Keep comments concise. Retain only non-obvious constraints or optional usage examples.
-- Put every generated file under `build/`; do not restore root-level PDFs, logs, SyncTeX files, or auxiliaries.
-- Document only the Zed workflow unless the user explicitly requests another editor setup.
+## Verification policy
 
-## Editing discipline
+- Do not invoke visual models by default.
+- Do not use any browser tools. Test functionality through APIs, CLI commands, and compilation.
+- Treat visual appearance beyond compilation as acceptable by default; a human will request visual fixes if needed. Do not open preview windows as a verification step.
+- Marp HTML rendering and API tests need no browser. Native PDF/PNG export may use Marp CLI's isolated browser compiler, but never a user browser profile or visual inspection. Temporary server tests use HTTP and must shut down/clean up afterward.
+- Run the narrow check for the changed template and check local Markdown/image links. Do not install global dependencies or change unrelated talks.
 
-- Preserve ordinary Beamer class-option forwarding.
-- Do not edit files under `build/` by hand.
-- Keep public commands backward compatible:
-  - `\VirgilingTitleFrame`
-  - `\VirgilingOutlineFrame`
-  - `\VirgilingEnableSectionOutlines`
-  - `\VirgilingFooterLeft`
-  - `\VirgilingFooterCenter`
-  - `\VirgilingFooterRight`
-- Keep `example.tex` generic and ensure each frame demonstrates one reusable pattern.
-- Update `README.md` when commands, dependencies, or build behavior change.
+## Git discipline
 
-## Verification
-
-Run from this directory:
-
-```bash
-mkdir -p build
-tectonic -X compile example.tex \
-  --outdir build \
-  --keep-logs \
-  --keep-intermediates \
-  --synctex
-```
-
-Before completing a change:
-
-- Confirm `build/example.pdf` exists and opens.
-- Check `build/example.log` for LaTeX errors, missing characters, and overfull boxes.
-- Confirm citations in the final PDF and confirm the bibliography is generated under `build/`; Tectonic's kept log may retain BibLaTeX's first-pass rerun notice when using the BibTeX backend.
-- Confirm Cambria Math and MD IO remain embedded in the PDF after typography changes.
-- Confirm the template source directory contains no generated LaTeX files.
+- Implement and verify in small coherent steps. Before delivery, squash only this task's unpublished changes into one final commit per independent repository. Use an English, single-line commit message.
+- Keep history linear. Fetch the configured upstream before synchronizing; if it has new commits, rebase local work onto it rather than creating a merge commit. Stop on conflicts requiring a decision.
+- Never commit ignored artifacts or sensitive state. Stage explicit source/docs paths, not whole workspace trees.
+- Do not push, force-push, or rewrite already published history without explicit permission.
