@@ -9,7 +9,7 @@ import sys
 
 SKILL = Path(__file__).resolve().parents[1]
 TEMPLATE = SKILL.parents[2]
-SKILLS = ('init-slides-os', 'make-marp-slides')
+WORKSPACE_SKILLS = ('make-marp-slides',)
 FORBIDDEN = {'.git', '.claude', '.pi', '.env', 'sessions', 'logs', 'node_modules', 'build'}
 
 
@@ -50,8 +50,8 @@ def planned_files():
         if mode not in (0o644, 0o755):
             raise ValueError(f'Invalid file mode: {relative}')
         files[relative] = (data, mode)
-    # Local entry points keep the canonical skill and its relative references in template/.
-    for name in SKILLS:
+    # Only the everyday authoring skill is exposed outside template/.
+    for name in WORKSPACE_SKILLS:
         source = safe_path(TEMPLATE, f'.agents/skills/{name}/SKILL.md').read_text()
         if not source.startswith('---\n') or '\n---\n' not in source:
             raise ValueError(f'Invalid skill frontmatter: {name}')

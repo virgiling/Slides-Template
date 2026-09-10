@@ -65,7 +65,7 @@ tectonic -X compile example.tex --outdir build --keep-logs --keep-intermediates 
 - [init-slides-os](.agents/skills/init-slides-os/SKILL.md)：为新机器/新克隆初始化工作区。
 - [make-marp-slides](.agents/skills/make-marp-slides/SKILL.md)：只将指定讲义片段制作成 Marp 页面片段，不生成封面/结束页，不适用于 Beamer。
 
-Skill 使用 `.agents/skills/<name>/SKILL.md`；支持相应发现规则的 Agent 可按需加载。初始化会给外层工作区安装轻量入口，完整技能仍维护在本仓库。AI 先读 [AGENT.md](AGENT.md) 及对应模板规则；操作指南与技能都不替代用户授权。
+Skill 使用 `.agents/skills/<name>/SKILL.md`；支持相应发现规则的 Agent 可按需加载。初始化仅给外层工作区安装 `make-marp-slides` 轻量入口；`init-slides-os` 留在模板内供初始化使用，完整技能仍维护在本仓库。AI 先读 [AGENT.md](AGENT.md) 及对应模板规则；操作指南与技能都不替代用户授权。
 
 ## 仓库边界与许可证
 

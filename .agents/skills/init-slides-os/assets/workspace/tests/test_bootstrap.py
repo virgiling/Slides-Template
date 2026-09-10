@@ -79,9 +79,9 @@ class BootstrapTests(unittest.TestCase):
         self.assertFalse((self.root / 'demo/scripts').exists())
         result = self.initialize()
         self.assertIn('Created 0 files', result.stdout)
-        for name in ('init-slides-os', 'make-marp-slides'):
-            wrapper = self.root / f'.agents/skills/{name}/SKILL.md'
-            self.assertIn(f'../../../template/.agents/skills/{name}/SKILL.md', wrapper.read_text())
+        wrapper = self.root / '.agents/skills/make-marp-slides/SKILL.md'
+        self.assertIn('../../../template/.agents/skills/make-marp-slides/SKILL.md', wrapper.read_text())
+        self.assertFalse((self.root / '.agents/skills/init-slides-os').exists(), 'initialization skill stays in template only')
         self.assertFalse((self.root / 'docs').exists(), 'usage docs have one source under template')
 
     def test_conflicts_are_preflighted_without_partial_writes(self):

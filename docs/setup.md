@@ -52,7 +52,7 @@ make build-template TYPE=marp
 slides/                         # 运行时工作区；依赖只装一次
 ├── Makefile / package.json / bun.lock
 ├── scripts/ / tests/ / .zed/
-├── .agents/skills/              # 指向模板完整 skill 文档的轻量入口
+├── .agents/skills/              # 仅 make-marp-slides 写作入口
 ├── template/                   # 本次克隆，保持独立 Git 仓库
 │   ├── docs/ / .agents/skills/
 │   ├── marp/                   # 只有主题、示例、素材、文档
@@ -107,7 +107,9 @@ make thumbnails TYPE=marp                  # 或 latex；重建真实封面
 - [init-slides-os](../.agents/skills/init-slides-os/SKILL.md)：按所需格式检查依赖并初始化工作区。
 - [make-marp-slides](../.agents/skills/make-marp-slides/SKILL.md)：仅把指定讲义片段转成 Marp 页面片段，不生成整份讲义。
 
-使用 `.agents/skills/<name>/SKILL.md` 标准结构，不是 `.agents/skill/name.md`。初始化会在外层放置两个轻量 skill 入口；完整规则仍只有模板中的一份。重新加载项目技能后使用；pi 可显式调用 `/skill:init-slides-os` / `/skill:make-marp-slides`。不支持自动发现的 Agent 可直接读取上述文件。其他 harness 的发现路径/调用命令以其文档为准，不修改个人配置。
+使用 `.agents/skills/<name>/SKILL.md` 标准结构，不是 `.agents/skill/name.md`。初始化只在外层放置 `make-marp-slides` 轻量入口；`init-slides-os` 留在模板仓库，完整规则仍只有模板中的一份。重新加载项目技能后，pi 在外层可调用 `/skill:make-marp-slides`；在模板目录中才加载 `/skill:init-slides-os`，也可直接读取模板中的初始化 skill。不支持自动发现的 Agent 可直接读取上述文件。其他 harness 的发现路径/调用命令以其文档为准，不修改个人配置。
+
+旧版工作区如果已有 `.agents/skills/init-slides-os/SKILL.md`，确认它只是生成的转发入口后可删除；新版不会再生成它，也不会擅自删除用户已有技能。
 
 ## 更新与验证
 

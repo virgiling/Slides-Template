@@ -33,7 +33,6 @@ make help
 - [安装依赖、命令、Zed、更新](template/docs/setup.md)
 - [修改字体、颜色与样式](template/docs/customization.md)
 - [全屏终端、Ghostty 共享、Nerd Font 图标与排错](template/docs/terminal.md)
-- [初始化 skill](template/.agents/skills/init-slides-os/SKILL.md)
 - [仅生成指定 Marp 片段的 skill](template/.agents/skills/make-marp-slides/SKILL.md)
 
 ## 维护

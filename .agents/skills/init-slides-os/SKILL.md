@@ -36,7 +36,7 @@ python3 <absolute-skill-directory>/scripts/init_workspace.py --check
 python3 <absolute-skill-directory>/scripts/init_workspace.py
 ```
 
-脚本从清单复制随仓库分发的公开初始化资源到父工作区，并生成两个本地 skill 入口。它不下载、不安装、不移动仓库、不启动服务、不创建 Git 提交。已存在且相同的文件跳过；不同内容或符号链接直接报冲突，先解决冲突再继续，**不要绕过检查强制覆盖**。
+脚本从清单复制随仓库分发的公开初始化资源到父工作区，并仅生成外层 `make-marp-slides` 技能入口；`init-slides-os` 本身留在模板仓库。它不下载、不安装、不移动仓库、不启动服务、不创建 Git 提交。已存在且相同的文件跳过；不同内容或符号链接直接报冲突，先解决冲突再继续，**不要绕过检查强制覆盖**。
 
 运行后仍在外层安装依赖、构建和管理报告，不能在 `marp/` 或单份讲稿中安装 node_modules。若只要独立 LaTeX 编译，可按指南跳过整个共享工作区初始化。
 

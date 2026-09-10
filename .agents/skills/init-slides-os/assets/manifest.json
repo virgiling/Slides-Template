@@ -16,13 +16,13 @@
     {
       "path": "AGENT.md",
       "asset": "workspace/AGENT.md.in",
-      "sha256": "432d3d585caa6e060201de8011191d235f8b0a597d5beb37e1a50c57120ca030",
+      "sha256": "ff1f072412aeb3c9e49266fd2b24de91320765a31afc9f6e1dc6cb09ef91ffc9",
       "mode": 420
     },
     {
       "path": "README.md",
       "asset": "workspace/README.md.in",
-      "sha256": "118343a760ae0937eeaeae45993ca86b85634f18d7204725ea0c8dbc2d58bc33",
+      "sha256": "5c8e1ec3a305c759773a6c97c6b44dbb489257a9ac8f8e44d2a4b5cb0b7b9cde",
       "mode": 420
     },
     {
@@ -166,7 +166,7 @@
     {
       "path": "tests/test_bootstrap.py",
       "asset": "workspace/tests/test_bootstrap.py",
-      "sha256": "cb9eaa7cc1dd328393518e658f5aa894ac899f9ed6a0c47b8eaa3a6f12fbecfd",
+      "sha256": "15d67d9bf26e2e682c1a8088b2b346b479ecd7c10207969eae1c74bbbfc1a625",
       "mode": 420
     }
   ]
