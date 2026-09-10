@@ -1,0 +1,431 @@
+#!/bin/sh
+
+set -eu
+
+ROOT=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd -P)
+TEMPLATES="$ROOT/template"
+MARP="$ROOT/node_modules/.bin/marp"
+ENGINE="$ROOT/scripts/marp-engine.cjs"
+SKIM_DISPLAYLINE="/Applications/Skim.app/Contents/SharedSupport/displayline"
+
+info() { printf '[slides] %s\n' "$*"; }
+warn() { printf '[slides] warning: %s\n' "$*" >&2; }
+fail() { printf '[slides] error: %s\n' "$*" >&2; exit 2; }
+require_command() { command -v "$1" >/dev/null 2>&1 || fail "required command not found: $1"; }
+
+validate_type() {
+  case "$1" in latex|marp) ;; *) fail "unknown TYPE '$1'; choose latex or marp" ;; esac
+}
+
+validate_project_name() {
+  case "$1" in
+    ''|template|scripts|tests|.*|-*|*[!A-Za-z0-9._-]*) fail "invalid or reserved project name '$1'" ;;
+  esac
+}
+
+project_name_from_env() {
+  PROJECT_NAME=${SLIDE:-${NAME:-}}
+  validate_project_name "$PROJECT_NAME"
+}
+
+require_safe_directory() {
+  [ -d "$1" ] && [ ! -L "$1" ] || fail "directory is missing or symbolic: $1"
+  [ ! -L "$1/build" ] || fail "build directory may not be symbolic: $1/build"
+}
+
+resolve_template() {
+  PROJECT_TYPE=$1
+  validate_type "$PROJECT_TYPE"
+  require_safe_directory "$TEMPLATES"
+  PROJECT_NAME="template/$PROJECT_TYPE"
+  PROJECT_DIR="$TEMPLATES/$PROJECT_TYPE"
+  require_safe_directory "$PROJECT_DIR"
+  case "$PROJECT_TYPE" in
+    latex) ENTRY_FILE=example.tex; [ -f "$PROJECT_DIR/virgiling-slides.cls" ] || fail "missing LaTeX class" ;;
+    marp) ENTRY_FILE=example.md; [ -f "$PROJECT_DIR/theme.css" ] || fail "missing Marp theme.css" ;;
+  esac
+  [ -f "$PROJECT_DIR/$ENTRY_FILE" ] || fail "missing template entry: $PROJECT_NAME/$ENTRY_FILE"
+  [ ! -L "$PROJECT_DIR/$ENTRY_FILE" ] || fail "template entry may not be symbolic"
+  ACTIVE_SOURCE="$PROJECT_DIR/$ENTRY_FILE"
+  ACTIVE_LINE=1
+}
+
+require_project() {
+  validate_project_name "$1"
+  PROJECT_NAME=$1
+  PROJECT_DIR="$ROOT/$PROJECT_NAME"
+  require_safe_directory "$PROJECT_DIR"
+  if [ -f "$PROJECT_DIR/main.tex" ] && [ -f "$PROJECT_DIR/slides.md" ]; then
+    fail "ambiguous project '$PROJECT_NAME': both main.tex and slides.md exist"
+  elif [ -f "$PROJECT_DIR/main.tex" ]; then
+    PROJECT_TYPE=latex
+    ENTRY_FILE=main.tex
+  elif [ -f "$PROJECT_DIR/slides.md" ]; then
+    PROJECT_TYPE=marp
+    ENTRY_FILE=slides.md
+  else
+    fail "project '$PROJECT_NAME' needs main.tex or slides.md"
+  fi
+  [ ! -L "$PROJECT_DIR/$ENTRY_FILE" ] || fail "project entry may not be symbolic"
+  ACTIVE_SOURCE="$PROJECT_DIR/$ENTRY_FILE"
+  ACTIVE_LINE=1
+}
+
+resolve_current_project() {
+  source_file=${ZED_FILE:-${FILE:-}}
+  source_line=${ZED_ROW:-${LINE:-1}}
+  [ -n "$source_file" ] || fail "no active file; select a file inside a slide project"
+  case "$source_line" in ''|*[!0-9]*) source_line=1 ;; esac
+  case "$source_file" in /*) ;; *) source_file="$ROOT/$source_file" ;; esac
+  [ -f "$source_file" ] && [ ! -L "$source_file" ] || fail "active file is missing or symbolic"
+  source_dir=$(CDPATH= cd -- "$(dirname "$source_file")" && pwd -P)
+  source_file="$source_dir/$(basename "$source_file")"
+  case "$source_file" in "$ROOT"/*) ;; *) fail "active file is outside the slides workspace" ;; esac
+  relative_file=${source_file#"$ROOT"/}
+  case "$relative_file" in
+    template/latex/*) resolve_template latex ;;
+    template/marp/*) resolve_template marp ;;
+    template/*) fail "select a file inside template/latex or template/marp" ;;
+    */*) require_project "${relative_file%%/*}" ;;
+    *) fail "active file must be inside a slide project directory" ;;
+  esac
+  ACTIVE_SOURCE=$source_file
+  ACTIVE_LINE=$source_line
+}
+
+output_path() {
+  case "$PROJECT_TYPE" in
+    latex)
+      OUTPUT_FORMAT=${FORMAT:-pdf}
+      [ "$OUTPUT_FORMAT" = pdf ] || fail "LaTeX output requires FORMAT=pdf"
+      ;;
+    marp)
+      OUTPUT_FORMAT=${FORMAT:-html}
+      case "$OUTPUT_FORMAT" in html|pdf) ;; *) fail "Marp FORMAT must be html or pdf" ;; esac
+      ;;
+  esac
+  OUTPUT_FILE="$PROJECT_DIR/build/${ENTRY_FILE%.*}.$OUTPUT_FORMAT"
+}
+
+require_marp() {
+  require_command node
+  [ -x "$MARP" ] || fail "shared Marp tooling missing; run make install at the workspace root"
+  [ -f "$ENGINE" ] || fail "shared Marp engine missing: $ENGINE"
+}
+
+build_resolved_project() {
+  output_path
+  info "building $PROJECT_NAME/$ENTRY_FILE ($PROJECT_TYPE)"
+  case "$PROJECT_TYPE" in
+    latex)
+      require_command tectonic
+      mkdir -p "$PROJECT_DIR/build"
+      (cd "$PROJECT_DIR" && tectonic -X compile "$ENTRY_FILE" --outdir build --keep-logs --keep-intermediates --synctex)
+      ;;
+    marp)
+      require_marp
+      node "$ROOT/scripts/copy-assets.cjs" "$PROJECT_DIR"
+      if [ "$OUTPUT_FORMAT" = pdf ]; then
+        (cd "$PROJECT_DIR" && "$MARP" --no-config-file --no-html --engine "$ENGINE" --theme theme.css "$ENTRY_FILE" --pdf --allow-local-files --output "$OUTPUT_FILE")
+      else
+        (cd "$PROJECT_DIR" && "$MARP" --no-config-file --no-html --engine "$ENGINE" --theme theme.css "$ENTRY_FILE" --output "$OUTPUT_FILE")
+      fi
+      ;;
+  esac
+  [ -s "$OUTPUT_FILE" ] || fail "build produced no output: $OUTPUT_FILE"
+  info "built ${OUTPUT_FILE#"$ROOT"/}"
+}
+
+build_named_project() { require_project "$1"; build_resolved_project; }
+
+preview_resolved_project() {
+  output_path
+  if [ "$PROJECT_TYPE" = latex ] && [ -x "$SKIM_DISPLAYLINE" ]; then
+    "$SKIM_DISPLAYLINE" -r -z -b "$ACTIVE_LINE" "$OUTPUT_FILE" "$ACTIVE_SOURCE"
+  elif command -v open >/dev/null 2>&1; then
+    open "$OUTPUT_FILE"
+  else
+    warn "no opener found; output is at $OUTPUT_FILE"
+  fi
+}
+
+clean_resolved_project() {
+  if [ -d "$PROJECT_DIR/build" ]; then
+    rm -rf -- "$PROJECT_DIR/build"
+    info "cleaned $PROJECT_NAME/build"
+  else
+    info "$PROJECT_NAME is already clean"
+  fi
+}
+
+clean_named_project() { require_project "$1"; clean_resolved_project; }
+
+for_each_project() {
+  action=$1
+  count=0
+  for candidate_dir in "$ROOT"/*; do
+    [ -f "$candidate_dir/main.tex" ] || [ -f "$candidate_dir/slides.md" ] || continue
+    "$action" "${candidate_dir##*/}"
+    count=$((count + 1))
+  done
+  [ "$count" -gt 0 ] || info "no slide projects found"
+}
+
+list_one_project() {
+  require_project "$1"
+  output_path
+  if [ -s "$OUTPUT_FILE" ]; then status=built; else status=source-only; fi
+  printf '%-28s %-8s %s\n' "$PROJECT_NAME" "$PROJECT_TYPE" "$status"
+}
+
+list_projects() {
+  printf '%-28s %-8s %s\n' PROJECT TYPE STATUS
+  for_each_project list_one_project
+}
+
+write_project_instructions() {
+  cat > "$destination/AGENT.md" <<EOF
+# Slide Project Instructions
+
+This is an independent $kind talk copied from template/$kind. Edit $entry here,
+not the reusable template. Assets belong in figures/ (LaTeX) or assets/ (Marp).
+The original workspace supports make build SLIDE=$name and make clean SLIDE=$name.
+EOF
+  cat >> "$destination/AGENT.md" <<'EOF'
+
+## Permanent rules (apply to future tasks too)
+
+- Do not invoke visual models by default.
+- Do not use browser tools. Test functionality through APIs, CLI commands, and compilation.
+- Beyond compilation, accept visual appearance by default; a human will report issues to fix.
+- Do not launch preview/watch commands or viewers during automated verification.
+- Implement and verify in small coherent steps. Before delivery, squash only this task's unpublished changes into one final commit per repository, with an English, single-line commit message.
+- Keep history linear. Fetch the configured upstream before synchronization and rebase if the remote has new commits; do not merge. Skip synchronization if no remote is configured.
+- Do not push, force-push, or rewrite published history without permission.
+- If the user requests visual approval before committing, leave changes uncommitted until approval; passing tests is not visual approval.
+- Never read/copy sessions, private logs, databases, credentials, .env, .claude/, or .pi/.
+- Stage explicit source/docs paths only. Put outputs in build/; never commit build/ or node_modules/.
+- Clean up task-created temporary files without deleting pre-existing outputs.
+- Keep these rules in every child AGENT.md. Update instructions and docs when the workflow changes.
+EOF
+  if [ "$kind" = latex ]; then
+    cat >> "$destination/AGENT.md" <<'EOF'
+
+## LaTeX commands
+
+Use the installed Linux Biolinum, Cambria Math, and MD IO fonts; do not copy fonts.
+Keep the class name virgiling-slides and its public commands.
+
+    mkdir -p build
+    tectonic -X compile main.tex --outdir build --keep-logs --keep-intermediates --synctex
+
+Check that build/main.pdf exists and inspect only this compilation's diagnostics,
+PDF text, and fonts via CLI tools. No browser or visual inspection is required.
+EOF
+  else
+    cat >> "$destination/AGENT.md" <<'EOF'
+
+## Marp commands
+
+In the original workspace, install tooling once with make install, then use
+make build SLIDE=<project> or make serve SLIDE=<project> for an HTTP preview URL.
+No package.json or node_modules is required inside this talk.
+The local serve preview includes a one-click ttyd terminal drawer; exports do not.
+The workspace manages ttyd automatically through a private Unix socket. No Web
+sharing or manual login is needed. Zellij only keeps the native fish session
+alive and shareable with Ghostty; TERMINAL_SESSION optionally selects its name.
+Opening may create a shell, never an Agent. Do not read user credentials/config/
+session files or stop user sessions when closing preview. Keep the full-height,
+blurred overlay UI/transport in workspace scripts, never in this talk/theme.
+
+The workspace uses scripts/marp-engine.cjs through Marp's official --engine seam
+for Obsidian callouts, native MathML and hjkl/gg/G navigation aliases. Standalone
+vanilla Marp renders the base theme but not these extensions; pass --engine with
+the absolute path to the workspace engine for parity. Do not copy tooling here.
+Output from the manager: build/slides.html with build/assets/; share the whole build/.
+Use Linux Biolinum, unchanged CJK fallbacks, Cambria Math and MD IO. Keep math: katex
+for native MathML; mathjax opts into its own SVG math fonts instead. Never fake
+Cambria Math by replacing KaTeX HTML fonts. Do not distribute proprietary fonts.
+Keep raw HTML disabled and math trust false. Keep the native Bespoke player.
+Do not confuse CSS theme with CLI --template (bespoke or bare).
+Use --- for new pages, and * or 1) lists for fragments on the same numbered page.
+j/k (and h/l) follow native linear/fragment navigation; at fragment boundaries
+navigation moves to the adjacent page. -- is not a vertical-slide separator.
+Use the local image-split slide class for explanation-left/image-right layout,
+keeping both columns in one AIGC frame. Keep the bottom name/short-title footer
+and page numbers visible; do not add a top band.
+
+## Mandatory AIGC provenance
+
+All AI-generated slide titles, prose, lists, tables, code, formulas and captions
+must be inside an Obsidian-style > [!aigc] callout, rendered as .callout.aigc.
+Prefix every body line with >; leave slide separators and directives outside.
+For a fully AI-authored slide, wrap all content, including its heading, in one
+AIGC frame. For mixed authorship, wrap only the generated portions. Footer/page
+UI is shared chrome, not generated slide content. Label generated notes AIGC.
+Do not remove the visible AIGC label/logo, label human text as AI, or treat the
+badge as evidence of correctness. Never send slides to a model automatically.
+The logo is assets/aigc-badge.png from the user-selected Gundam official image:
+https://gundam-official.com/media/UC_0b76f920b8/UC_0b76f920b8.png
+It retains third-party rights, is not covered by this project's MIT license,
+and may need replacement or permission before redistribution.
+PDF/image compilation can use Marp's local browser engine for trusted inputs;
+do not use browser tools or visual models to inspect appearance.
+Server tests may start a short-lived process and use HTTP requests, then stop it.
+EOF
+  fi
+}
+
+create_project() {
+  project_name_from_env
+  name=$PROJECT_NAME
+  kind=${TYPE:-latex}
+  resolve_template "$kind"
+  template_dir=$PROJECT_DIR
+  template_entry=$ENTRY_FILE
+  if [ "$kind" = latex ]; then
+    entry=main.tex
+    sources="example.tex virgiling-slides.cls references.bib"
+  else
+    entry=slides.md
+    sources="example.md theme.css assets/workflow.svg assets/aigc-badge.png"
+  fi
+  # Preflight the allowlist before creating anything; never enumerate private state.
+  for source in $sources; do
+    [ -f "$template_dir/$source" ] && [ ! -L "$template_dir/$source" ] || fail "missing or symbolic template source: $source"
+    parent=$source
+    while [ "${parent%/*}" != "$parent" ]; do
+      parent=${parent%/*}
+      [ ! -L "$template_dir/$parent" ] || fail "template source directory may not be symbolic: $parent"
+    done
+  done
+  for source in .gitignore LICENSE.txt; do
+    [ -f "$TEMPLATES/$source" ] && [ ! -L "$TEMPLATES/$source" ] || fail "missing or symbolic shared source: $source"
+  done
+  destination="$ROOT/$name"
+  [ ! -L "$destination" ] || fail "project directory may not be symbolic"
+  if [ -e "$destination" ]; then
+    [ -d "$destination" ] || fail "destination is not a directory"
+    [ -z "$(find "$destination" -mindepth 1 -maxdepth 1 -print -quit)" ] || fail "directory '$name' is not empty"
+  else
+    mkdir "$destination"
+  fi
+  for source in $sources; do
+    mkdir -p "$destination/$(dirname "$source")"
+    cp "$template_dir/$source" "$destination/$source"
+  done
+  cp "$TEMPLATES/.gitignore" "$TEMPLATES/LICENSE.txt" "$destination/"
+  [ "$template_entry" = "$entry" ] || mv "$destination/$template_entry" "$destination/$entry"
+  [ "$kind" != latex ] || mkdir -p "$destination/figures"
+  write_project_instructions
+  info "created $name ($kind); edit $name/$entry"
+  [ "$kind" != marp ] || info "shared tooling: make install; live preview: make serve SLIDE=$name"
+}
+
+install_project() {
+  require_command bun
+  (cd "$ROOT" && bun install --frozen-lockfile)
+}
+
+watch_project() {
+  project_name_from_env
+  require_project "$PROJECT_NAME"
+  [ "$PROJECT_TYPE" = marp ] || fail "watch is only supported for Marp"
+  [ "${FORMAT:-html}" = html ] || fail "watch supports HTML only"
+  require_marp
+  node "$ROOT/scripts/copy-assets.cjs" "$PROJECT_DIR"
+  (cd "$PROJECT_DIR" && "$MARP" --no-config-file --no-html --engine "$ENGINE" --theme theme.css "$ENTRY_FILE" --watch --output "build/${ENTRY_FILE%.*}.html")
+}
+
+serve_resolved_project() {
+  [ "$PROJECT_TYPE" = marp ] || fail "serve is only supported for Marp"
+  require_marp
+  require_command python3
+  [ -z "${ZELLIJ_PORT:-}" ] || fail "ZELLIJ_PORT is obsolete; ttyd is now managed automatically"
+  PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/scripts/serve-marp.py" "$PROJECT_DIR" "$ENTRY_FILE" \
+    --port "${PORT:-8080}" --session "${TERMINAL_SESSION:-${ZELLIJ_SESSION:-}}"
+}
+
+serve_project() {
+  if [ -n "${SLIDE:-${NAME:-}}" ]; then
+    project_name_from_env
+    require_project "$PROJECT_NAME"
+  else
+    resolve_template marp
+  fi
+  serve_resolved_project
+}
+
+thumbnails() {
+  selection=${TYPE:-all}
+  [ "$selection" = all ] || validate_type "$selection"
+  require_command python3
+  PYTHONDONTWRITEBYTECODE=1 python3 "$ROOT/scripts/thumbnails.py" "$selection"
+}
+
+delete_project() {
+  project_name_from_env
+  require_project "$PROJECT_NAME"
+  [ "${CONFIRM:-}" = "$PROJECT_NAME" ] || fail "deletion requires CONFIRM=$PROJECT_NAME"
+  rm -rf -- "$PROJECT_DIR"
+  info "deleted $PROJECT_NAME (cannot be undone by this manager)"
+}
+
+doctor() {
+  require_command make
+  for kind in ${TYPE:-latex marp}; do
+    resolve_template "$kind"
+    case "$kind" in latex) require_command tectonic ;; marp) require_marp ;; esac
+    info "$kind is ready"
+  done
+  [ -x "$SKIM_DISPLAYLINE" ] || warn "Skim not installed; human preview uses the default application"
+}
+
+show_help() {
+  cat <<'EOF'
+Slides workspace commands (run at the workspace root)
+
+  make new NAME=my-talk [TYPE=latex|marp]  Default: latex
+  make install                           Install locked shared Marp tooling once
+  make list                              Detect main.tex or slides.md
+  make build SLIDE=my-talk [FORMAT=pdf]   LaTeX: PDF; Marp: HTML by default
+  make build-template TYPE=latex|marp     Compile a template example
+  make preview SLIDE=my-talk              Compile + open (explicit human use only)
+  make watch SLIDE=my-talk                Rebuild HTML on edits; no HTTP URL
+  make serve [SLIDE=my-talk] [PORT=8080]   Local Marp preview + one-click ttyd drawer
+       [TERMINAL_SESSION=slides]  Optional shared session; default chosen automatically
+  make thumbnails [TYPE=latex|marp]       Regenerate actual cover PNGs
+  make clean SLIDE=my-talk                Remove only build/
+  make delete SLIDE=my-talk CONFIRM=my-talk
+  make build-all | make clean-all
+  make doctor [TYPE=latex|marp]            Check both tracks unless selected
+  make test                              Isolated CLI tests, no browsers
+
+Zed calls build-current, preview-current and clean-current using ZED_FILE/ZED_ROW.
+Template files route to template/latex/example.tex or template/marp/example.md.
+Do not use viewers as verification. Server tests use HTTP only and stop afterward.
+EOF
+}
+
+case "${1:-help}" in
+  help) show_help ;;
+  new) create_project ;;
+  install) install_project ;;
+  list) list_projects ;;
+  build) project_name_from_env; build_named_project "$PROJECT_NAME" ;;
+  build-template) resolve_template "${TYPE:-latex}"; build_resolved_project ;;
+  preview) project_name_from_env; build_named_project "$PROJECT_NAME"; preview_resolved_project ;;
+  watch) watch_project ;;
+  serve) serve_project ;;
+  thumbnails) thumbnails ;;
+  clean) project_name_from_env; require_project "$PROJECT_NAME"; clean_resolved_project ;;
+  delete) delete_project ;;
+  build-all) for_each_project build_named_project ;;
+  clean-all) for_each_project clean_named_project ;;
+  doctor) doctor ;;
+  build-current) resolve_current_project; build_resolved_project ;;
+  preview-current) resolve_current_project; build_resolved_project; preview_resolved_project ;;
+  serve-current) resolve_current_project; serve_resolved_project ;;
+  clean-current) resolve_current_project; clean_resolved_project ;;
+  *) fail "unknown command '$1'; run make help" ;;
+esac

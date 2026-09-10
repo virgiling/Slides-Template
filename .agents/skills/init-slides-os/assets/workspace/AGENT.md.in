@@ -1,0 +1,50 @@
+# Slides Workspace Instructions
+
+These permanent rules apply to this workspace and generated talk instructions. Child rules may add format-specific details, not weaken these boundaries.
+
+## Layout and source ownership
+
+- Work on `main` unless the user requests otherwise. `template/` is an independent Git repository; never stage the nested checkout or personal talks incidentally.
+- Formal talks use native LaTeX/Beamer (`main.tex` → Tectonic → PDF). Informal talks use Marp (`slides.md` + `theme.css` → HTML/PDF). Do not change a talk's format or force common Markdown sources without asking.
+- Before using a template, read `template/AGENT.md`, then its `latex/AGENT.md` or `marp/AGENT.md` and README.
+- Keep format directories and talks free of runtime scripts/dependencies/tests. Shared maintenance sources live in outer `scripts/`, `tests/`, Makefile and the root Node manifest/lockfile.
+- The reviewed snapshot under `template/.agents/skills/init-slides-os/assets/` is the distribution exception: it bootstraps a standalone clone into its parent workspace, without installed dependencies, private state or destructive overwrites. After changing distributed sources, run `python3 scripts/package-bootstrap.py`; `--check` and bootstrap tests must pass. Never hand-edit snapshot copies.
+- Keep usage docs in `template/docs/` (setup, customization, terminal), not duplicated research/test diaries. Canonical skills live in `template/.agents/skills/<name>/SKILL.md`; bootstrap installs lightweight outer entry points.
+- Keep one shared template `.gitignore` and root LICENSE. New talks use explicit source-file allowlists and receive permanent instructions; never copy whole directories. Existing talks remain independent source copies and are not automatically overwritten by updates.
+- Outputs belong in each selected project's `build/`. Reject symbolic projects, sources and build paths. Delete requires explicit same-name confirmation. Preserve pre-existing outputs and unrelated work.
+
+## Marp and provenance
+
+- Use the shared official functional engine on every enhanced render path: `scripts/marp-engine.cjs` supplies Obsidian callouts, native MathML and `presentation-keys.cjs`. Keep Marp/Bespoke as the player, raw HTML disabled and KaTeX trust false.
+- Every AI-generated title, paragraph, list, code block, formula, table and caption belongs in `> [!aigc]` / `.callout.aigc`. Preserve human provenance; do not indiscriminately relabel human text. Keep the visible label/logo/frame and mark generated notes `AIGC:`. The badge retains third-party rights, not MIT licensing.
+- `---` creates pages; native fragments share a page. Navigation aliases follow native linear/fragment behavior, ignore editing/composition/modifiers and do not introduce vertical slide stacks.
+- CSS owns presentation styles; scripts must not become part of an individual theme/talk application. Font customization belongs in the documented CSS/terminal settings, not global configuration or bundled fonts.
+
+## Preview and terminal
+
+Read `template/docs/terminal.md` and `template/docs/customization.md` before changing this layer.
+
+- Keep the native slide iframe full-sized. The rounded glass terminal overlays it without reflow; hide the floating opener while expanded and keep only the left-edge `>` collapse control. Do not restore a toolbar or session-info row.
+- Use native ttyd/xterm canvas transparency over a translucent CSS backing; keep text opaque and unblurred. Preserve the MD IO-first font stack with a Nerd Font symbol fallback unless the user changes it.
+- Preview fullscreen must include the outer shell and terminal controls. Route the native fullscreen button and slide-focused `f`/`F11` synchronously to the outer root, track browser Escape/reload, and leave the terminal's keyboard alone. Do not patch browser APIs or exported fullscreen behavior.
+- Clicking may lazily start preview-owned ttyd via a private Unix socket and create/attach one ordinary fish shell in native Zellij. No Zellij Web setup, manual login or automatic Agent startup. Do not send slide content automatically.
+- Preserve separate slide/terminal origins, loopback listeners, private socket permissions and capability/Cookie/Host/Origin checks. This trusts local native processes; it is not a public or multi-user terminal service. Keep credentials and connection metadata out of logs and exports.
+- Mirror only public slide sources/assets to the native Marp server, not the private project directory. Closing/collapsing detaches clients and cleans up only owned services/sockets; never kill user sessions. Fullscreen, page changes and Markdown reload must not restart terminal processes.
+- HTML/PDF/PNG build paths contain no terminal UI or connection information. No chat SDK, hidden context sharing or additional Agent permissions layer without separate authorization.
+
+## Verification and privacy
+
+- Do not use browser tools or visual models for verification. Use APIs, CLI, HTTP/WebSocket and compilation; visual appearance is assessed by the user. Do not open viewers, start a user's preview or launch an Agent as an automated check.
+- Native PDF/PNG compilation may use an isolated browser engine, never a user browser profile. Tests starting services must stop them and clean up. Real ttyd integration uses fresh synthetic HOME/config/socket state only.
+- Never inspect/copy user sessions, private logs, databases, credentials, `.env`, `.claude/` or `.pi/`. Installed font names/coverage and current test-owned diagnostics may be checked; do not read personal configuration to diagnose an issue.
+- Run `make test` and `bun run check` for manager/server changes. Use `TTYD_TEST=1 bun run check` for terminal transport changes; `SLIDES_TEST_BOOTSTRAP=1 make test` verifies fresh initialization, locked installation and a real Marp build.
+- For theme changes, use `make build-template TYPE=marp`; for reported Marp layout issues also use `MARP_TEST_PDF=1 make test`. HTML presence does not prove PDF visibility. For LaTeX changes, compile the example and inspect only that compile's logs/PDF text/fonts.
+- README thumbnails must be actual compiled covers; use outer `make thumbnails`, never illustrative replacements. Checked-in cover PNGs are the intentional build-output exception.
+- Update applicable docs/instructions, check local links and whitespace, and remove task-created temporary files. Report checks actually run and remaining gaps, not invented visual/performance approval.
+
+## Git delivery
+
+- Commit/push only when authorized, and only in the specified repository. Keep unrelated work and the other repository's index untouched.
+- When committing, consolidate this task's unpublished intermediate commits into one final English single-line commit per authorized repository; preserve previously finalized work. Visual approval, when requested, is required before commit and is not replaced by passing tests.
+- Keep history linear. Fetch the configured upstream before synchronization; rebase if needed, not merge. Never force-push or rewrite published history without explicit permission. Skip remote operations in repositories without remotes.
+- Stage explicit public source/docs paths, never dependencies, private state, personal talks or generated build outputs.

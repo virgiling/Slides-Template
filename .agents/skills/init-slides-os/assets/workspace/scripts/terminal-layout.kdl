@@ -1,0 +1,4 @@
+// A new preview session starts one ordinary shell, never a configured Agent layout.
+layout {
+    pane
+}

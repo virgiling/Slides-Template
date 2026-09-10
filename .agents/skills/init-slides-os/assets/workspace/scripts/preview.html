@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Slides · 本地预览</title>
+  <link rel="stylesheet" href="/__preview__/preview-drawer.css">
+  <script type="application/json" id="preview-config"><!--PREVIEW_CONFIG--></script>
+  <script type="module" src="/__preview__/preview-drawer.mjs"></script>
+</head>
+<body>
+  <button id="terminal-toggle" type="button" aria-expanded="false" aria-controls="terminal-panel">打开终端</button>
+  <main id="preview-workspace">
+    <iframe id="slide-frame" title="Marp 幻灯片" allow="fullscreen" allowfullscreen></iframe>
+    <aside id="terminal-panel" aria-label="终端抽屉" hidden>
+      <button id="terminal-close" type="button" aria-label="收起终端抽屉" title="收起终端" aria-controls="terminal-panel"><span aria-hidden="true">&gt;</span></button>
+      <div id="terminal-container"></div>
+    </aside>
+  </main>
+</body>
+</html>

@@ -2,30 +2,47 @@
 
 Read `../AGENT.md` and this directory's `README.md` first. These rules apply to all future work in this directory.
 
-## What is reusable
+## Reusable theme and shared extensions
 
-- `theme.css` is the reusable CSS theme, named `virgiling`. `example.md` only demonstrates native Marp usage.
-- Keep blue `#015CAD`, cyan `#003865`, system font fallbacks, white background, and a 16:9 example.
-- Use required `/* @theme virgiling */` metadata and inherit Marp's built-in default theme through `@import 'default'`.
-- Style slide `section` elements; use Markdown directives (`class`, `paginate`, `footer`) for page-specific choices.
-- Do not confuse CSS theme with CLI `--template`, which chooses the built-in HTML presenter (`bespoke` or `bare`). Do not build a custom player or converter.
-- Keep dependencies, tests, build/server/thumbnail scripts outside this template repository, in the surrounding slides workspace. Do not add package.json, lockfiles, node_modules, or helper scripts to this theme.
-- New talks need only the theme, Markdown and public assets plus shared LICENSE/.gitignore and their AGENT.md; do not turn them into Node projects.
-- `thumbnail.png` must be the actual rendered cover, never a hand-drawn illustration. Regenerate it via outer `make thumbnails TYPE=marp`, or native `marp --theme theme.css example.md --image png --image-scale 0.75 -o thumbnail.png`.
+- `theme.css` is the reusable CSS theme, named `virgiling`. Keep `/* @theme virgiling */` and `@import 'default'`, blue #015CAD / #003865, a white background and 16:9 examples.
+- Use Linux Biolinum for body text, unchanged PingFang SC / Noto Sans CJK SC fallbacks for Chinese, Cambria Math for mathematics, MD IO for code. Do not copy/distribute font files.
+- Retain native syntax highlighting and fenced-code language labels. No top band. Use a bottom blue band with name/short-title footer left and current/total page numbers right; hide only explicitly unpaginated page numbers. Explicitly override the inherited display:table clearfix with display:block and width:100% for the band; keep text above it.
+- Use the local `image-split` class for image+explanation slides: heading across both columns, explanation left, bounded contain-fit image right, inside the same AIGC frame. Do not stack a large fixed-width portrait image above long captions.
+- The outer `scripts/marp-engine.cjs` uses Marp's official functional-engine API for Obsidian callouts and `math: {lib: 'katex', katexOption: {output: 'mathml'}}`. Keep `math: katex` in examples. Native MathML uses Cambria Math; changing KaTeX HTML fonts would break metrics. Explicit `math: mathjax` opts into MathJax's own SVG font, not Cambria Math.
+- Preserve normal Markdown, title/body/nested callouts and official type aliases. For slides/PDF, keep +/- callouts expanded. Do not promise Obsidian wikilinks/embeds or folding UI.
+- Keep raw HTML disabled and KaTeX trust false. Escape user text through Markdown tokens, not HTML string interpolation.
+- `scripts/presentation-keys.cjs` adds h/j/k/l/gg/G aliases over native navigation. All arrows are linear/fragment-aware, not separate horizontal/vertical axes. Use `*` or `1)` lists for native fragments on the same numbered page; `---` creates a page, `--` does not. At fragment boundaries native navigation moves to the adjacent page. Do not silently invent reveal.js-style vertical stacks or new separators.
+- Ignore editing/input targets, composition and modified shortcuts. Do not build a replacement player or Vim editor.
+- Do not confuse CSS theme with CLI `--template`, which chooses `bespoke` or `bare`.
+- Dependencies, tests, all scripts and server integration stay in the outer slides workspace. Never add package.json, lockfiles, node_modules or helper scripts to this theme or new talks.
+- Theme-only vanilla Marp works for base CSS; full callout/math/key behavior requires the shared engine. A standalone clone includes that engine in the init-slides-os resources; use ../docs/setup.md to generate the outer workspace. Do not present vanilla CLI as a full rendering of the AIGC example.
+- For snippet-based slide writing, use ../.agents/skills/make-marp-slides/SKILL.md. Output Marp fragments only unless requested otherwise, preserve human provenance and links, and retain mandatory callout framing instead of raw HTML spans.
+- Never silently add an Agent backend or send slide content to a model. The surrounding workspace's authorized local `serve` provides a one-click ttyd drawer with automatic local authorization. It may create/attach one ordinary fish shell in a native Zellij session for persistence/Ghostty sharing, without Zellij Web setup. Keep the full-height blurred overlay and transport outside this template and all exports. Never automatically start an Agent, stop user sessions, or read their credentials/config. A structured chat UI or automatic slide context requires separate consent.
 
-## Usage
+## Mandatory AIGC provenance
 
-In the outer workspace: `make install` once, `make new NAME=<name> TYPE=marp`, then `make serve SLIDE=<name>` for a live HTTP preview or `make build SLIDE=<name>` for HTML export. `make serve` with no name previews this theme example.
+- **Every AI-generated piece of slide content must be inside `> [!aigc]`, rendered as `.callout.aigc`.** This includes titles, prose, lists, tables, code, formulas and captions—not just a footer watermark.
+- For an entirely generated slide, wrap its heading and all body content in one AIGC callout. Prefix every line (including blank/code lines) with `>`. Keep `---` slide separators and control directives outside.
+- For mixed authorship, frame only the generated portions. Never infer provenance from writing style or relabel human-authored content. Do not rewrite existing talks merely to apply template styles.
+- Footer/pagination UI is shared chrome, not generated body content. Prefix generated presenter notes with `AIGC:`.
+- Preserve the purple dashed frame, visible AIGC label and logo. The label indicates provenance, not factual correctness or official endorsement.
+- `assets/aigc-badge.png` is the local resized copy of the user-selected image: https://gundam-official.com/media/UC_0b76f920b8/UC_0b76f920b8.png . It retains third-party rights and is not covered by the repository MIT license. Preserve attribution; verify permission or replace before redistribution.
+- New Marp project instructions generated by the outer manager must carry these AIGC rules and include the logo in the explicit source allowlist.
 
-Standalone: install Marp CLI separately and run `marp --theme theme.css <talk.md>`. Native `marp --server --watch <dir>` serves that directory, so only use a public presentation directory. The outer server wrapper mirrors only public sources to avoid exposing private project state.
+## Usage and verification
 
-## Permanent rules
+In the outer workspace: `make install` once; `make serve` previews this example. For a talk: `make new NAME=<name> TYPE=marp`, then `make serve SLIDE=<name>` or `make build SLIDE=<name>`. Existing talks are standalone source copies, not automatically updated.
 
 - Do not invoke visual models by default. Do not use browser tools.
-- Verify functionality using APIs, CLI, HTTP, and compilation. Accept appearance unless a human reports a problem. No automated viewer-based inspection.
-- Native PDF/PNG export may use Marp's isolated browser compiler; that is compilation, not visual inspection. Never use a user browser profile.
-- HTTP tests may start a temporary server but must stop it and clean up afterward.
-- Implement and verify in small steps; before delivery squash this task's unpublished work into one final commit per independent repository. Use an English, single-line commit message.
-- Keep linear history: fetch upstream and rebase when the remote has new commits. Never push or rewrite published history without permission.
-- Do not read or copy sessions, private logs, databases, secrets, .env, .claude/, or .pi/. Use explicit source allowlists.
-- Keep the only template .gitignore at the repository root. Keep generated previews in build/; tracked thumbnail.png is the intentional documentation exception.
+- Verify functionality through APIs, CLI, HTTP and compilation. A human reviews appearance; automated tests do not constitute visual approval.
+- Run outer `bun run check`, `make test` and `make build-template TYPE=marp`. For layout feedback, opt into `MARP_TEST_PDF=1 make test` to check compiled PDF text bounds, image columns and the actual footer band (requires Poppler and native compiler); HTML text presence alone is insufficient. Verify actual PDF font names with `pdffonts`: LinBiolinum, CambriaMath, MDIO.
+- `thumbnail.png` must be the actual compiled cover, not an illustration. Regenerate with outer `make thumbnails TYPE=marp`; the shared engine and local badge must be included.
+- Native PDF/PNG export may use Marp's isolated browser compiler, never a user browser profile or visual inspection. Temporary HTTP tests must stop processes and clean up.
+- Keep the only template .gitignore at the repository root. Generated previews stay in build/; tracked thumbnail.png is the documentation exception.
+- Do not read/copy sessions, private logs, databases, secrets, .env, .claude/ or .pi/. Use explicit source allowlists.
+
+## Git policy
+
+- Implement and verify in small steps. **When the user requests visual approval first, leave all changes uncommitted until explicit approval.** Do not interpret successful tests as approval.
+- When authorized to commit, squash this task's unpublished changes into one final commit per independent repository, with an English, single-line message.
+- Keep linear history: fetch upstream and rebase when the remote has new commits. Never push or rewrite published history without permission. Stage only changed source/docs, never unrelated talks or private state.

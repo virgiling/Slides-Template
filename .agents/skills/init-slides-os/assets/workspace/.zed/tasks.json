@@ -1,0 +1,81 @@
+[
+  {
+    "label": "Slides: Build + Preview Current",
+    "command": "make",
+    "args": ["preview-current"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "tags": ["latex-build", "slides-preview"],
+    "save": "all",
+    "allow_concurrent_runs": false,
+    "use_new_terminal": false,
+    "reveal": "no_focus",
+    "hide": "on_success"
+  },
+  {
+    "label": "Slides: Build Current",
+    "command": "make",
+    "args": ["build-current"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "tags": ["latex-build", "slides-build"],
+    "save": "all",
+    "allow_concurrent_runs": false,
+    "use_new_terminal": false,
+    "reveal": "no_focus",
+    "hide": "on_success"
+  },
+  {
+    "label": "Slides: Serve Current (Marp)",
+    "command": "make",
+    "args": ["serve-current"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "save": "all",
+    "allow_concurrent_runs": false,
+    "use_new_terminal": false,
+    "reveal": "always",
+    "hide": "never"
+  },
+  {
+    "label": "Slides: Clean Current",
+    "command": "make",
+    "args": ["clean-current"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "save": "none",
+    "allow_concurrent_runs": false,
+    "use_new_terminal": false,
+    "reveal": "no_focus",
+    "hide": "on_success"
+  },
+  {
+    "label": "Slides: List Projects",
+    "command": "make",
+    "args": ["list"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "save": "none",
+    "allow_concurrent_runs": false,
+    "use_new_terminal": false,
+    "reveal": "always",
+    "hide": "never"
+  },
+  {
+    "label": "Slides: Check Environment",
+    "command": "make",
+    "args": ["doctor"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "save": "none",
+    "allow_concurrent_runs": false,
+    "use_new_terminal": false,
+    "reveal": "always",
+    "hide": "never"
+  },
+  {
+    "label": "Slides: Test Manager (No Browser)",
+    "command": "make",
+    "args": ["test"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "save": "all",
+    "allow_concurrent_runs": false,
+    "use_new_terminal": false,
+    "reveal": "always",
+    "hide": "never"
+  }
+]

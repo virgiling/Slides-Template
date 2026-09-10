@@ -1,93 +1,74 @@
 # Slides Templates
 
-按场合选择两套原生方案，不要求 Markdown 转 Beamer，也不强求同源内容。
+两套原生模板：正式报告用 LaTeX/Beamer，轻量分享用 Marp。不要求 Markdown 转 Beamer，也不强求同源。
 
 | LaTeX · 正式报告 | Marp · 轻量分享 |
 | --- | --- |
 | [![LaTeX 实际封面](latex/thumbnail.png)](latex/README.md) | [![Marp 实际封面](marp/thumbnail.png)](marp/README.md) |
-| 答辩、会议、复杂公式与引用 | 组内学习分享、论文讨论 |
-| 复用 Beamer 文档类 `virgiling-slides.cls` | 复用 CSS 主题 `theme.css` |
-| `.tex` → Tectonic → PDF | `.md` + theme → Marp CLI → HTML/PDF |
-| [使用说明](latex/README.md) · [AI 规则](latex/AGENT.md) | [使用说明](marp/README.md) · [AI 规则](marp/AGENT.md) |
+| 答辩、会议、复杂公式与引用 | 组内分享、课程片段、论文讨论 |
+| `main.tex` → Tectonic → PDF | `slides.md` + CSS → Marp → HTML/PDF |
+| [使用说明](latex/README.md) | [写作与主题](marp/README.md) |
 
-*缩略图来自真实编译封面，不是手绘示意。图片生成不代表进行了视觉模型检查。*
+## 只克隆这个仓库，如何运行？
 
-## 路由与边界
-
-```text
-template/                  # 独立 Git 仓库：只保存可复用模板/主题
-├── .gitignore             # 两个子目录共享
-├── AGENT.md
-├── LICENSE.txt
-├── README.md
-├── latex/
-│   ├── AGENT.md / README.md
-│   ├── thumbnail.png
-│   ├── example.tex
-│   ├── references.bib
-│   └── virgiling-slides.cls
-└── marp/
-    ├── AGENT.md / README.md
-    ├── thumbnail.png
-    ├── example.md
-    ├── theme.css
-    └── assets/workflow.svg
-```
-
-Marp 这一套的核心是 **theme**，不是自定义 HTML 播放器或应用脚手架。官方 `--template bespoke` / `bare` 是另一层概念，见 [Marp 说明](marp/README.md)。
-
-依赖、Makefile、服务、测试和缩略图脚本由外层 `slides/` 管理；**本仓库不提交 `scripts/`**，也不把这些工具复制进报告。
-
-## 单独使用
-
-LaTeX：
+先准备 Python 3.10+、Make、Node.js 18+、Bun；字体及各功能的可选依赖见[安装清单](docs/setup.md#需要什么)。在一个新的专用目录中：
 
 ```bash
-cd latex
+mkdir slides
+cd slides
+git clone https://github.com/virgiling/Slides-Template.git template
+python3 template/.agents/skills/init-slides-os/scripts/init_workspace.py --check
+python3 template/.agents/skills/init-slides-os/scripts/init_workspace.py
+make install
+make build-template TYPE=marp
+make serve
+# 人工打开打印的 Preview: URL
+```
+
+**不需要另一个私有工具仓库。** 初始化资源随本仓库提供，生成外层 `slides/` 的 Makefile、共享 engine、预览工具、测试与 Zed 任务；可完整渲染本仓库的 AIGC/callout 示例，而不只是基础 CSS。依赖仍只安装在外层，不进入模板或每份讲稿。
+
+初始化不安装软件、不移动仓库、不启动服务、不改全局配置。已有相同文件跳过，不同文件报冲突，绝不自动覆盖。完整流程、已有克隆的处理及升级方式见[安装与日常操作](docs/setup.md)。
+
+> 这些文件必须已包含在所克隆的版本中；尚未发布的本地改动不会随远端 clone 自动取得。
+
+## 新建自己的报告
+
+在初始化后的外层 `slides/` 执行：
+
+```bash
+make new NAME=group-sharing TYPE=marp
+# 编辑 group-sharing/slides.md
+make serve SLIDE=group-sharing
+make build SLIDE=group-sharing              # HTML + assets 位于该报告 build/
+make build SLIDE=group-sharing FORMAT=pdf
+
+make new NAME=conference-talk TYPE=latex
+# 编辑 conference-talk/main.tex
+make build SLIDE=conference-talk            # 需要 Tectonic 和系统字体
+```
+
+新报告是独立源码副本，不自动跟随模板更新。分享 Marp HTML 时带上整个 `build/`，不要只复制 HTML。
+
+只用 LaTeX 时也可跳过工作区初始化和所有 Node/Bun 工具：
+
+```bash
+cd template/latex                         # 从上面的 slides/ 起步
 mkdir -p build
 tectonic -X compile example.tex --outdir build --keep-logs --keep-intermediates --synctex
 ```
 
-Marp（已安装 Marp CLI）：
+## 使用文档与 AI skills
 
-```bash
-cd marp
-marp --theme theme.css example.md -o example.html
-marp --theme theme.css --server --watch .
-# http://localhost:8080/example.md
-```
+- [安装与日常操作](docs/setup.md)：依赖、初始化、创建/构建/预览、Zed、更新。
+- [字体与样式](docs/customization.md)：幻灯片字体、数学字体、终端字体、颜色与图标。
+- [本地终端预览](docs/terminal.md)：全屏、Ghostty 共享、会话保活与常见问题。
+- [init-slides-os](.agents/skills/init-slides-os/SKILL.md)：为新机器/新克隆初始化工作区。
+- [make-marp-slides](.agents/skills/make-marp-slides/SKILL.md)：只将指定讲义片段制作成 Marp 页面片段，不生成封面/结束页，不适用于 Beamer。
 
-直接 server 会服务指定目录，仅在不含私有文件的演示目录中运行，不对公网开放。详细文档与官方来源见子目录 README。
+Skill 使用 `.agents/skills/<name>/SKILL.md`；支持相应发现规则的 Agent 可按需加载。初始化会给外层工作区安装轻量入口，完整技能仍维护在本仓库。AI 先读 [AGENT.md](AGENT.md) 及对应模板规则；操作指南与技能都不替代用户授权。
 
-## 在 slides 工作区使用
+## 仓库边界与许可证
 
-```bash
-make install                            # 在 slides/，一次安装共享 Marp 工具
-make new NAME=conference-talk TYPE=latex
-make new NAME=group-sharing TYPE=marp
-make serve SLIDE=group-sharing           # 显示可访问的 HTTP 预览 URL
-make build SLIDE=group-sharing           # 导出 HTML + assets
-make thumbnails                         # 更新这两张真实封面
-```
+`latex/` 和 `marp/` 保持纯模板；`docs/` 是人和 AI 共用的操作指南；`.agents/skills/init-slides-os/assets/` 只保存可审查的初始化资源，不保存 node_modules、字体、个人报告、会话或构建产物。运行时脚本与依赖生成在父工作区。维护工具后按[更新流程](docs/setup.md#更新与验证)同步资源。
 
-不指定 TYPE 时，新建仍默认 LaTeX。新报告按入口识别类型，不复制 `.git/`、会话、日志、构建产物或依赖。
-
-## 更新封面
-
-外层工作区执行 `make thumbnails [TYPE=latex|marp]`，工具位于外层 `slides/scripts/`，使用临时目录编译并清理，只保留各模板的 `thumbnail.png`。
-
-独立仓库也可直接使用原生命令：
-
-```bash
-# 在 latex/，先编译 example.tex，再取 PDF 第一页（需要 Poppler）
-pdftoppm -f 1 -singlefile -png -scale-to-x 960 -scale-to-y 540 build/example.pdf thumbnail
-
-# 在 marp/，导出实际封面（需要 Marp 支持的本地浏览器编译引擎）
-marp --theme theme.css example.md --image png --image-scale 0.75 -o thumbnail.png
-```
-
-## 长期维护规则
-
-先读 [`AGENT.md`](AGENT.md)，再读对应子目录的 `AGENT.md`。默认不用视觉模型，不调用浏览器工具；功能通过 API/CLI/HTTP/编译验证，外观待人反馈。
-
-小步实现与验证，交付前将本次未推送变更 squash 为一个最终提交（每个独立仓库各一个），英文单行消息；保持线性历史，远端有新提交时 rebase，不自动发布。许可证见 [LICENSE.txt](LICENSE.txt)。
+封面 PNG 来自真实编译；重建使用外层 `make thumbnails [TYPE=latex|marp]`。代码许可证见 [LICENSE.txt](LICENSE.txt)；Marp 的 AIGC logo 属第三方，不适用 MIT，分发前确认权限或替换，见 [Marp 说明](marp/README.md#素材版权)。

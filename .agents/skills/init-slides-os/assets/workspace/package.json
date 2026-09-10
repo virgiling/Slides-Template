@@ -1,0 +1,14 @@
+{
+  "name": "virgiling-slides-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shared Marp tooling for the slides workspace",
+  "license": "MIT",
+  "scripts": {
+    "check": "node --test tests/*.test.cjs"
+  },
+  "devDependencies": {
+    "@marp-team/marp-cli": "4.5.1",
+    "@marp-team/marp-core": "4.4.0"
+  }
+}

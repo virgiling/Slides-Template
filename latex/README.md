@@ -1,6 +1,6 @@
 # LaTeX · virgiling-slides
 
-[← 模板选择](../README.md) · [Marp 轻量模板](../marp/README.md)
+[← 模板选择](../README.md) · [Marp 轻量模板](../marp/README.md) · [安装与初始化](../docs/setup.md) · [修改字体](../docs/customization.md)
 
 ![LaTeX 模板实际封面](thumbnail.png)
 
@@ -28,7 +28,7 @@
 - Linux Biolinum：Regular、Bold、Italic
 - Cambria Math
 - MD IO：Regular、Bold、Italic、Bold Italic
-- Skim，用于 Zed 编译后的 PDF 定位与刷新
+- Skim（可选，仅人工预览），用于 Zed 编译后的 PDF 定位与刷新
 
 Linux Biolinum、Cambria Math 和 MD IO 均直接从系统字体库加载，不需要复制字体、下载字体或运行初始化脚本。Linux Biolinum 没有独立 Bold Italic 时，模板只对系统 Bold 字体合成斜体形态。
 
@@ -57,7 +57,7 @@ template/latex/
 
 ## 新建报告
 
-在外层 `slides/` 工作区运行 `make new NAME=my-talk TYPE=latex`（默认类型也是 `latex`）。新报告独立维护 `main.tex`，不会自动跟随模板更新。单独使用此仓库时，只复制 `example.tex`（改名为 `main.tex`）、`virgiling-slides.cls`、`references.bib` 及根目录的 `.gitignore`、`LICENSE.txt`。
+需要统一 Make/Zed 命令时，先按[初始化指南](../docs/setup.md)从本仓库生成外层 `slides/` 工作区；只编译 LaTeX 可跳过初始化，直接使用下方 Tectonic 命令，不需要 Node/Bun。工作区中运行 `make new NAME=my-talk TYPE=latex`（默认类型也是 `latex`）。新报告独立维护 `main.tex`，不会自动跟随模板更新。单独使用此仓库时，只复制 `example.tex`（改名为 `main.tex`）、`virgiling-slides.cls`、`references.bib` 及根目录的 `.gitignore`、`LICENSE.txt`。
 
 AI 使用前应依次阅读 `../AGENT.md` 和本目录 `AGENT.md`。默认只做编译和 CLI/API 检查，不调用浏览器工具或视觉模型；外观问题由人反馈。
 

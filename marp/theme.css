@@ -1,43 +1,320 @@
 /* @theme virgiling */
-@import 'default';
+@import "default";
 
 section {
-  --virgiling-blue: #015cad;
-  --virgiling-cyan: #003865;
-  background: #ffffff;
-  color: #1b2530;
-  font-family: 'Linux Biolinum', 'PingFang SC', 'Noto Sans CJK SC', sans-serif;
-  font-size: 30px;
-  line-height: 1.45;
-  padding: 64px 76px 78px;
-  justify-content: flex-start;
-  border-top: 8px solid var(--virgiling-blue);
+    --virgiling-blue: #015cad;
+    --virgiling-cyan: #003865;
+    background: #ffffff;
+    color: #1b2530;
+    font-family: "Linux Biolinum", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+    font-size: 30px;
+    line-height: 1.4;
+    padding: 54px 76px 76px;
+    justify-content: flex-start;
+    border: 0;
 }
 
-h1, h2, h3, strong, a { color: var(--virgiling-blue); }
-h1 { font-size: 1.65em; margin-bottom: 0.6em; }
-h2 { font-size: 1.25em; }
-a { text-decoration: underline; }
-ul { list-style-type: square; }
-li + li { margin-top: 0.3em; }
-
-pre, code { font-family: 'MD IO', 'SFMono-Regular', Consolas, monospace; }
-pre { background: #f0f5fa; border: 1px solid #d8e4ef; border-radius: 8px; padding: 22px; }
-code { font-size: 0.85em; }
-blockquote { border-left: 5px solid var(--virgiling-blue); color: #486075; background: #f0f5fa; padding: 12px 24px; }
-table { font-size: 0.8em; }
-th { background: var(--virgiling-cyan); color: #fff; }
-section img { max-height: 430px; }
-
-header, footer, section::after {
-  font-size: 16px;
-  color: var(--virgiling-cyan);
+h1,
+h2,
+h3,
+strong,
+a {
+    color: var(--virgiling-blue);
 }
-header { top: 22px; left: 76px; }
-footer { bottom: 24px; left: 76px; }
-section::after { right: 76px; bottom: 24px; }
+h1 {
+    font-size: 1.65em;
+    margin: 0 0 0.55em;
+}
+h2 {
+    font-size: 1.25em;
+}
+a {
+    text-decoration: underline;
+}
+ul {
+    list-style-type: square;
+}
+li + li {
+    margin-top: 0.25em;
+}
+table {
+    font-size: 0.8em;
+}
+th {
+    background: var(--virgiling-cyan);
+    color: #fff;
+}
+section img {
+    max-height: 390px;
+}
 
-section.lead { justify-content: center; }
-section.lead h1 { font-size: 2.3em; }
-section.lead p { color: #486075; }
-section.lead::after { display: none; }
+/* Native MathML uses the installed OpenType MATH font, not KaTeX's HTML metrics. */
+.katex {
+    font-family: inherit;
+    font-size: 1.1em;
+}
+math {
+    font-family: "Cambria Math", "STIX Two Math", math;
+}
+math[display="block"] {
+    margin: 0.65em 0;
+}
+
+/* Marp's built-in highlighter is retained; the engine adds a language label. */
+pre,
+code {
+    font-family: "MD IO", "SFMono-Regular", Consolas, monospace;
+}
+pre {
+    position: relative;
+    background: #f0f5fa;
+    color: #223344;
+    border: 1px solid #d8e4ef;
+    border-radius: 8px;
+    padding: 38px 22px 18px;
+    margin: 0.6em 0;
+}
+pre::before {
+    content: attr(data-language);
+    position: absolute;
+    top: 9px;
+    right: 16px;
+    color: #486075;
+    font:
+        14px "MD IO",
+        monospace;
+}
+code {
+    font-size: 0.8em;
+}
+pre .hljs-keyword,
+pre .hljs-literal {
+    color: #7c3a91;
+}
+pre .hljs-string,
+pre .hljs-attr {
+    color: #236342;
+}
+pre .hljs-number,
+pre .hljs-built_in {
+    color: #9b421d;
+}
+pre .hljs-title,
+pre .hljs-type {
+    color: #015cad;
+}
+pre .hljs-comment {
+    color: #687785;
+    font-style: italic;
+}
+
+blockquote {
+    border-left: 5px solid var(--virgiling-blue);
+    color: #486075;
+    background: #f0f5fa;
+    padding: 12px 24px;
+}
+
+/* Obsidian-flavored blockquotes: > [!note] Title. Parsed by the shared engine. */
+.callout {
+    --callout-color: 1, 92, 173;
+    --callout-icon: "i";
+    background: rgba(var(--callout-color), 0.06);
+    border: 1px solid rgba(var(--callout-color), 0.22);
+    border-left: 4px solid rgb(var(--callout-color));
+    border-radius: 8px;
+    color: inherit;
+    font-size: 0.9em;
+    margin: 14px 0;
+    padding: 14px 22px;
+}
+.callout::before,
+.callout::after {
+    content: none;
+}
+.callout > :last-child {
+    margin-bottom: 0;
+}
+.callout > p {
+    margin: 0.35em 0;
+}
+.callout-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    color: rgb(var(--callout-color));
+    font-size: 0.88em;
+    font-weight: 700;
+    margin-bottom: 0.35em;
+}
+.callout-title::before {
+    content: var(--callout-icon);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 1.1em;
+    height: 1.1em;
+    font-family: sans-serif;
+}
+.callout[data-callout="note"] {
+    --callout-icon: "✎";
+}
+.callout[data-callout="abstract"] {
+    --callout-color: 0, 125, 137;
+    --callout-icon: "≡";
+}
+.callout[data-callout="todo"] {
+    --callout-icon: "☐";
+}
+.callout[data-callout="tip"] {
+    --callout-color: 0, 125, 137;
+    --callout-icon: "◇";
+}
+.callout[data-callout="success"] {
+    --callout-color: 35, 126, 72;
+    --callout-icon: "✓";
+}
+.callout[data-callout="question"] {
+    --callout-color: 160, 100, 16;
+    --callout-icon: "?";
+}
+.callout[data-callout="warning"] {
+    --callout-color: 181, 105, 17;
+    --callout-icon: "!";
+}
+.callout[data-callout="failure"] {
+    --callout-color: 184, 49, 61;
+    --callout-icon: "×";
+}
+.callout[data-callout="danger"] {
+    --callout-color: 184, 49, 61;
+    --callout-icon: "!";
+}
+.callout[data-callout="bug"] {
+    --callout-color: 184, 49, 61;
+    --callout-icon: "※";
+}
+.callout[data-callout="example"] {
+    --callout-color: 107, 33, 168;
+    --callout-icon: "⌘";
+}
+.callout[data-callout="quote"] {
+    --callout-color: 100, 112, 124;
+    --callout-icon: "“";
+}
+
+/* AI-authored content must be inside this frame, not just tagged in the footer. */
+.callout.aigc {
+    --callout-color: 107, 33, 168;
+    font-size: inherit;
+    background: #fcfaff;
+    border: 1px dashed #ddccf0;
+    padding: 18px 26px;
+}
+.aigc > .callout-title {
+    color: rgba(76, 29, 149, 0.8);
+    font-size: 16px;
+}
+.aigc > .callout-title::before {
+    content: "";
+    width: 1.4em;
+    height: 1.4em;
+    background: url("assets/aigc-badge.png") center / contain no-repeat;
+}
+
+/* Keep image + explanation beside each other inside the same AIGC frame. */
+section.image-split > .aigc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 32px;
+    align-items: start;
+}
+section.image-split > .aigc > * {
+    grid-column: 1;
+    min-width: 0;
+}
+section.image-split > .aigc > .callout-title,
+section.image-split > .aigc > h1 {
+    grid-column: 1 / -1;
+}
+section.image-split > .aigc > p:has(> img) {
+    grid-column: 2;
+    grid-row: 3 / span 3;
+    align-self: center;
+    margin: 0;
+}
+section.image-split img {
+    display: block;
+    width: 100%;
+    height: 310px;
+    max-height: 310px;
+    object-fit: contain;
+}
+
+/* Beamer-like bottom band, with name/short title left and page count right. */
+section::before {
+    content: "";
+    /* Override the default theme's empty display:table clearfix (zero width). */
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 32px;
+    background: linear-gradient(
+        90deg,
+        var(--virgiling-cyan) 0 36%,
+        var(--virgiling-blue) 36% 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+header,
+footer,
+section::after {
+    font-size: 16px;
+    line-height: 20px;
+}
+header {
+    top: 20px;
+    left: 76px;
+    color: var(--virgiling-cyan);
+}
+footer {
+    bottom: 8px;
+    left: 76px;
+    max-width: calc(100% - 260px);
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 2;
+}
+footer a {
+    color: inherit;
+}
+section::after {
+    content: attr(data-marpit-pagination) " / " attr(data-marpit-pagination-total);
+    display: block;
+    position: absolute;
+    padding: 0;
+    right: 64px;
+    bottom: 8px;
+    color: #fff;
+    z-index: 2;
+}
+section:not([data-marpit-pagination])::after {
+    display: none;
+}
+
+section.lead {
+    justify-content: center;
+}
+section.lead h1 {
+    font-size: 2.1em;
+}
+section.lead .aigc > p {
+    color: #486075;
+}

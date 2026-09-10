@@ -1,0 +1,53 @@
+# Slides Workspace
+
+正式报告用 LaTeX/Beamer，轻量分享用 Marp。模板是独立的 `template/` Git 仓库；共享工具和依赖运行在本工作区，每份讲稿只有源码与素材。
+
+| LaTeX | Marp |
+| --- | --- |
+| [![LaTeX 封面](template/latex/thumbnail.png)](template/latex/README.md) | [![Marp 封面](template/marp/thumbnail.png)](template/marp/README.md) |
+
+## 快速操作
+
+以下命令在本目录执行：
+
+```bash
+make install                             # 安装一次锁定的 Marp 依赖
+make serve                               # 人工打开打印的 Preview: URL
+make new NAME=group-sharing TYPE=marp
+make serve SLIDE=group-sharing
+make build SLIDE=group-sharing            # HTML + assets → 报告 build/
+make build SLIDE=group-sharing FORMAT=pdf
+
+make new NAME=conference-talk TYPE=latex  # 默认也是 LaTeX
+make build SLIDE=conference-talk
+make help
+```
+
+编辑报告副本，不覆盖模板。共享脚本/终端字体参数修改后需重启 `make serve` 并刷新；Markdown、CSS、公开素材热更新。正式分享使用整个 `build/`，不要另存终端预览页面。
+
+## 使用文档
+
+文档统一随模板分发，不在外层重复维护排查记录：
+
+- [单独克隆模板后的完整启动流程](template/README.md)
+- [安装依赖、命令、Zed、更新](template/docs/setup.md)
+- [修改字体、颜色与样式](template/docs/customization.md)
+- [全屏终端、Ghostty 共享、Nerd Font 图标与排错](template/docs/terminal.md)
+- [初始化 skill](template/.agents/skills/init-slides-os/SKILL.md)
+- [仅生成指定 Marp 片段的 skill](template/.agents/skills/make-marp-slides/SKILL.md)
+
+## 维护
+
+运行时工具的维护源在本工作区。更新公开工具后同步模板的初始化资源，再验证：
+
+```bash
+python3 scripts/package-bootstrap.py
+make test
+bun run check
+TTYD_TEST=1 bun run check                 # 可选真实终端，隔离的合成会话
+SLIDES_TEST_BOOTSTRAP=1 make test          # 可选全新初始化、安装依赖、真实 HTML 编译
+```
+
+`make thumbnails [TYPE=latex|marp]` 重建真实封面；`MARP_TEST_PDF=1 make test` 进行可选 PDF 布局检查。日常测试不调用浏览器工具或视觉模型，外观由人确认。永久规则见 [AGENT.md](AGENT.md)。
+
+两个仓库独立管理；不要暂存个人讲稿、依赖、会话或构建输出，不自动提交或发布。

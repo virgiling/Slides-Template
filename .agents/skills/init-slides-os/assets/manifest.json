@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "files": [
+    {
+      "path": ".gitignore",
+      "asset": "workspace/gitignore",
+      "sha256": "f8048b8e047172c18fa11c0e9597fba0e105f9002041e7c7cdf05c1b327d8d12",
+      "mode": 420
+    },
+    {
+      "path": ".zed/tasks.json",
+      "asset": "workspace/.zed/tasks.json",
+      "sha256": "7f633b24e59ce09b354c7d421df93edf738f6c6c89d2876b131bf3025d923013",
+      "mode": 420
+    },
+    {
+      "path": "AGENT.md",
+      "asset": "workspace/AGENT.md.in",
+      "sha256": "432d3d585caa6e060201de8011191d235f8b0a597d5beb37e1a50c57120ca030",
+      "mode": 420
+    },
+    {
+      "path": "README.md",
+      "asset": "workspace/README.md.in",
+      "sha256": "118343a760ae0937eeaeae45993ca86b85634f18d7204725ea0c8dbc2d58bc33",
+      "mode": 420
+    },
+    {
+      "path": "Makefile",
+      "asset": "workspace/Makefile",
+      "sha256": "8d6644122d2525c92dae5ab88347312309dfb57d48b285add11f83c24aa62b19",
+      "mode": 420
+    },
+    {
+      "path": "package.json",
+      "asset": "workspace/package.json",
+      "sha256": "2bcb45554c9afcf1abbff51fb38891c4deb8ba903ef4f64a565e49c1ecc1ebab",
+      "mode": 420
+    },
+    {
+      "path": "bun.lock",
+      "asset": "workspace/bun.lock",
+      "sha256": "a655056ed655bc87b4050b10cc52fd4303e93531f65f05c7276a6985e421b919",
+      "mode": 420
+    },
+    {
+      "path": "scripts/slides",
+      "asset": "workspace/scripts/slides",
+      "sha256": "8fafbad57f11a50c76800f5a0ae9d2c46e8e83d3e160d9f90ae3e72f7ad03940",
+      "mode": 493
+    },
+    {
+      "path": "scripts/copy-assets.cjs",
+      "asset": "workspace/scripts/copy-assets.cjs",
+      "sha256": "748dd730393b239e6bc0bc28f361fc5b19ff91bde13735d6676c46d8cfed8aa3",
+      "mode": 420
+    },
+    {
+      "path": "scripts/marp-engine.cjs",
+      "asset": "workspace/scripts/marp-engine.cjs",
+      "sha256": "6af76c2a0ded88ddb1373ca55f32c126927be362b199dd87ec0b0f2f1d7c5977",
+      "mode": 420
+    },
+    {
+      "path": "scripts/presentation-keys.cjs",
+      "asset": "workspace/scripts/presentation-keys.cjs",
+      "sha256": "dfd532c36264f0e95c167a9b2dd85aa53c47a5314b1ead25366ebcd54fd3f593",
+      "mode": 420
+    },
+    {
+      "path": "scripts/marp-loopback.cjs",
+      "asset": "workspace/scripts/marp-loopback.cjs",
+      "sha256": "6248f0e5a0f15bee165c5799e544ce1607b4217e3a18fde46b881e8a0ffa3feb",
+      "mode": 420
+    },
+    {
+      "path": "scripts/serve-marp.py",
+      "asset": "workspace/scripts/serve-marp.py",
+      "sha256": "fe88bec3557aa806f737868732e426e448429f5f38fbce25e279ce32d0ab0d41",
+      "mode": 420
+    },
+    {
+      "path": "scripts/preview-proxy.cjs",
+      "asset": "workspace/scripts/preview-proxy.cjs",
+      "sha256": "5e4dd56c919f60032ac11be2526335325068418444f03ecee6c01f78ee26a23e",
+      "mode": 420
+    },
+    {
+      "path": "scripts/preview.html",
+      "asset": "workspace/scripts/preview.html",
+      "sha256": "d1c6288327bdd892406f21be602fcf84b53e55164873ea3c59b62042027dd3e2",
+      "mode": 420
+    },
+    {
+      "path": "scripts/preview-drawer.mjs",
+      "asset": "workspace/scripts/preview-drawer.mjs",
+      "sha256": "f84d69dc2270d757d92cd1c778a6451067472851214a490d832ec6878274b3d2",
+      "mode": 420
+    },
+    {
+      "path": "scripts/preview-drawer.css",
+      "asset": "workspace/scripts/preview-drawer.css",
+      "sha256": "35a7ee0aaeaaf56b432812dce46d29a5d097ed15f7142a2c4de2c16b918d613d",
+      "mode": 420
+    },
+    {
+      "path": "scripts/terminal-backend.cjs",
+      "asset": "workspace/scripts/terminal-backend.cjs",
+      "sha256": "28294a1d7f0672274a5d5d0b46e6c7a3e5db6866be93272b856552c5ac9e0097",
+      "mode": 420
+    },
+    {
+      "path": "scripts/terminal-layout.kdl",
+      "asset": "workspace/scripts/terminal-layout.kdl",
+      "sha256": "6a633b5bddbe8342ef4172fa082bf460bf87f43e68c11894781ff220f40859aa",
+      "mode": 420
+    },
+    {
+      "path": "scripts/thumbnails.py",
+      "asset": "workspace/scripts/thumbnails.py",
+      "sha256": "0b4a2df4559b574d448a665441721c9f7f264c0fedd00d1f5f5ae15580ffa105",
+      "mode": 420
+    },
+    {
+      "path": "scripts/package-bootstrap.py",
+      "asset": "workspace/scripts/package-bootstrap.py",
+      "sha256": "42760063639f4bc4122ae09b3a93a300c5b791bbf9ba1afbfbe9405fda2ee26e",
+      "mode": 420
+    },
+    {
+      "path": "tests/render.test.cjs",
+      "asset": "workspace/tests/render.test.cjs",
+      "sha256": "114e7bfaebb7518a231beb4f8f2873811106c89c4a7c088b29d1dd2d3d14fea2",
+      "mode": 420
+    },
+    {
+      "path": "tests/preview.test.cjs",
+      "asset": "workspace/tests/preview.test.cjs",
+      "sha256": "fe9ef652f49f1d6abc1c3fe78a347e94cb656ad9c09823dac5e0d7ecf6cdd351",
+      "mode": 420
+    },
+    {
+      "path": "tests/ttyd.test.cjs",
+      "asset": "workspace/tests/ttyd.test.cjs",
+      "sha256": "d06873818fb108f5cc33b42656e5240b2d80819ddc7a54fb8bc64573e89d41f0",
+      "mode": 420
+    },
+    {
+      "path": "tests/test_slides.py",
+      "asset": "workspace/tests/test_slides.py",
+      "sha256": "d66e4591a8648bf2520296ce24c84de76640e88f3f1748af9a17d7bb7f143309",
+      "mode": 420
+    },
+    {
+      "path": "tests/test_marp_server.py",
+      "asset": "workspace/tests/test_marp_server.py",
+      "sha256": "b246f818d8c15d3d65f604d86ad62fa126a04898d5f9a4d110c2c006a9697ed4",
+      "mode": 420
+    },
+    {
+      "path": "tests/test_marp_layout.py",
+      "asset": "workspace/tests/test_marp_layout.py",
+      "sha256": "abc301c50791ade82afec734a5198f4d2486e1bf9ab16d0c62212803bf618b80",
+      "mode": 420
+    },
+    {
+      "path": "tests/test_bootstrap.py",
+      "asset": "workspace/tests/test_bootstrap.py",
+      "sha256": "cb9eaa7cc1dd328393518e658f5aa894ac899f9ed6a0c47b8eaa3a6f12fbecfd",
+      "mode": 420
+    }
+  ]
+}

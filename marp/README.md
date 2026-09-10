@@ -1,90 +1,40 @@
 # Marp · Virgiling Theme
 
-[← 模板选择](../README.md) · [LaTeX 正式模板](../latex/README.md)
+[← 模板首页](../README.md) · [安装工作区](../docs/setup.md) · [字体与样式](../docs/customization.md)
 
 ![Marp 实际封面](thumbnail.png)
 
-*来自 `example.md` 的实际渲染封面，不是手绘示意。*
+本目录提供 CSS theme、Markdown 示例与素材。使用原生 Marp/Bespoke 播放器；`--template bespoke` / `bare` 指播放器，**不是**这里的 `theme.css`。
 
-## 这里复用的是 theme，不是一套应用工程
+## 运行与导出
 
-按 [Marpit Theme CSS 文档](https://marpit.marp.app/theme-css)，主题就是 CSS：
+单独克隆后先按[根 README](../README.md#只克隆这个仓库如何运行)初始化，完整工具会生成到外层 `slides/`，包括 callout / MathML engine，不再依赖另一个未提供的仓库。
 
-```css
-/* @theme virgiling */
-@import 'default';
-
-section { /* 每一页的字体、颜色、留白 */ }
-h1 { /* 标题 */ }
-section.lead { /* 封面版式 */ }
-```
-
-本目录的核心资产是 **`theme.css`**。`example.md` 只演示怎么使用它；没有自定义 Markdown 转换器、HTML 播放器、依赖包、测试框架或构建脚本。
-
-| 概念 | 在这里对应什么 |
-| --- | --- |
-| **Theme** | `theme.css`：颜色、字体、留白、页脚、封面版式 |
-| **Content** | `example.md`：示例内容；新报告编辑自己的 `slides.md` |
-| **Directives** | Markdown 的 `theme`、`paginate`、`class`、`footer` 等 |
-| **CLI template** | `--template bespoke` / `bare`：HTML 展示容器，不是视觉主题 |
-
-CLI 默认的 `bespoke` 已提供翻页、全屏和演讲者视图，不需要再造播放器。来源：[Marp CLI · Template](https://github.com/marp-team/marp-cli#template)。
-
-## 文件
-
-```text
-marp/
-├── theme.css
-├── example.md
-├── assets/workflow.svg
-├── thumbnail.png
-├── README.md
-└── AGENT.md
-```
-
-共享忽略规则和许可证位于模板仓库根目录。构建、server、测试和缩略图工具统一放在外层 `slides/`，**不属于这个主题**，也不复制进新报告。
-
-## 在 slides 工作区使用
+在外层 `slides/`：
 
 ```bash
-make install                              # 工作区只安装一次 Marp 工具
-make serve                                # 预览主题示例
-# 打开终端显示的 http://localhost:8080/example.md
-
+make install
+make build-template TYPE=marp               # template/marp/build/example.html
+make serve                                 # 看模板示例
 make new NAME=group-sharing TYPE=marp
-make serve SLIDE=group-sharing PORT=8080
-# 打开 http://localhost:8080/slides.md
-
-make build SLIDE=group-sharing             # 导出 HTML + assets 到 build/
-make build SLIDE=group-sharing FORMAT=pdf  # 可选 PDF
-make thumbnails TYPE=marp                  # 更新这个 README 的真实封面
+make serve SLIDE=group-sharing
+make build SLIDE=group-sharing              # group-sharing/build/slides.html + assets/
+make build SLIDE=group-sharing FORMAT=pdf
 ```
 
-`serve` 使用官方 server + watch 模式，提供 HTTP 预览与修改刷新；只同步选中报告、theme 和公开图片到临时服务目录，不暴露工作区或私有会话。退出时清理。不会自动打开浏览器。
+编辑报告副本的 `slides.md` / `theme.css`，不覆盖模板示例。共享脚本改动后重启 `make serve`；Markdown、CSS 和公开图片可热更新。输出 HTML 时分享整个 `build/`。
 
-## 单独使用 theme
-
-安装 Marp CLI 后，从本目录运行：
-
-```bash
-marp --theme theme.css example.md -o example.html
-marp --theme theme.css --server --watch .
-# http://localhost:8080/example.md；PORT=5000 可改端口
-
-marp --theme theme.css example.md --image png --image-scale 0.75 -o thumbnail.png
-```
-
-或者只把 `theme.css` 放进已有项目，执行：
+基础 CSS 也可直接用于已安装的普通 Marp CLI：
 
 ```bash
 marp --theme path/to/theme.css your-talk.md
 ```
 
-用 `--theme-set` 注册 CSS 后，也能在 Markdown 中用 `theme: virgiling` 选择它。来源：[Marp CLI · Theme](https://github.com/marp-team/marp-cli#theme)。
+但**普通 CLI 不解析本示例的 `[!aigc]` / callout 扩展，也不自动启用本项目的 MathML/键位路径**。完整效果请使用初始化后的 Make 命令；不要把降级命令当作完整示例的构建方式。
 
-单独启动官方 server 时，它会服务你指定的目录；**只在不含隐私文件的演示目录里运行**。服务器可能监听所有网卡，不要部署到公网。PDF/图片导出需要本地 Chrome/Edge/Firefox 编译引擎；可信本地图片需要 `--allow-local-files`。
+## 页面格式与 AIGC
 
-## 内容写法
+一份完整报告的 frontmatter 示例：
 
 ```markdown
 ---
@@ -93,31 +43,70 @@ theme: virgiling
 size: 16:9
 paginate: true
 math: katex
+footer: 'Your Name · Group Seminar'
 ---
 
-<!-- _class: lead -->
-<!-- _paginate: false -->
-
-# 封面
-
----
-
-# 第一页内容
-
-- 一个主要结论
+> [!aigc]
+>
+> # 标题同样属于生成内容
+>
+> ## 一个核心观点
+>
+> - 生成的正文、代码、公式、表格、图注都在框内。
 ```
 
-- `---` 分页；`_` 前缀的 directive 只作用于当前页。
-- 代码用 fenced block；公式用 `$...$` / `$$...$$`。
-- 分栏图片：`![bg right:40% contain](assets/workflow.svg)`。
-- 备注可用 HTML 注释，但可能进入演讲者视图，不能写入秘密。
-- 主题使用 Linux Biolinum / MD IO，缺失时回退到系统字体；无需拷贝字体。
+- 所有 AI 新增/实质性改写的内容必须使用 `> [!aigc]`，由 engine 渲染为 `.callout.aigc`。纯生成页面可用一个框包住标题与正文，避免重复标签。
+- 混合来源只标记生成部分，不把人工原文重新标成 AI。保留人类作者的论述、引用与链接；生成备注以 `AIGC:` 标识。
+- 每行（包括空行、代码围栏）都加 `>`；分页 `---` 和控制 directive 放在框外。
+- 不使用原始 HTML `<span>` 包裹生成内容，raw HTML 已禁用。紫色虚线框、标签与 logo 表示来源，不表示事实已经核验。
+- 将 `make-marp-slides` 输出的页面片段插入现有报告时，保留报告自己的 frontmatter；skill 默认不生成 frontmatter、封面或结束页。
 
-## 验证与官方资料
+### 分页、fragments 与按键
 
-外层工作区执行 `bun run check`（API/CLI 渲染）和 `make test`（含 HTTP server 测试）。不使用浏览器工具或视觉模型检查外观。相关永久规则见根级及本目录 `AGENT.md`。
+`---` 创建新页；`*` 或 `1)` 列表是 Marp 原生同页 fragments，不额外计页；普通 `-` 列表一次显示。`--` 不是分页符，不支持二维纵向子页。
 
-- [Theme CSS](https://marpit.marp.app/theme-css)：`@theme`、`section`、继承和页脚。
-- [Directives](https://marpit.marp.app/directives)：主题选择、局部版式和分页。
-- [Watch / Server mode](https://github.com/marp-team/marp-cli#conversion-modes)：watch 输出文件；server 按 HTTP 请求渲染。
-- [封面图片导出](https://github.com/marp-team/marp-cli#title-slide)：`--image` 只导出第一页。
+`j/l` 下一步、`h/k` 上一步、`gg` 第一页、`G` 最后一页，沿用原生片段/线性导航。编辑区域、组合输入、修饰键和终端输入不会被这些翻页别名接管。全屏与终端用法见[终端预览](../docs/terminal.md)。
+
+### Callout
+
+```markdown
+> [!note] 自定义标题
+> 正文支持 **强调**、列表、公式、代码和嵌套 callout。
+>
+> > [!warning] 限制
+> > 注意适用范围。
+```
+
+支持 note / abstract / info / todo / tip / success / question / warning / failure / danger / bug / example / quote 及常见别名，未知类型用默认样式。`[!type]+` / `[!type]-` 始终展开，便于幻灯片与 PDF 一致；这不是完整 Obsidian 方言，不提供 wikilink、embed 或折叠 UI。
+
+### 图文分栏
+
+```markdown
+<!-- _class: image-split -->
+
+> [!aigc]
+>
+> # 图片与论点
+>
+> 左栏解释，保持简短。
+>
+> ![图注](assets/workflow.svg)
+```
+
+标题跨两栏，文字左、图片右；图片保持比例并受边界限制。不要给图片再设置巨大的固定宽度。一般每页最多一张主图；AI 未获授权时不生成图片或图表。
+
+## 字体与页脚
+
+默认 Linux Biolinum 正文、PingFang SC / Noto Sans CJK SC 中文回退、MD IO 代码。`math: katex` 配合共享 engine 输出原生 MathML，使用 Cambria Math；`math: mathjax` 改用 MathJax 的 SVG 字体。字体不分发，修改方法见[字体指南](../docs/customization.md)。
+
+底部蓝带左侧为 `footer`，右侧为当前页/总页数，没有顶部色带。封面可用 `<!-- _paginate: false -->` 隐藏页码，但仍计入总页数。
+
+已有报告不会自动更新：按需合并 `theme.css` 与素材，不覆盖 `slides.md`。模板维护/验证规则见 [AGENT.md](AGENT.md)。
+
+## 素材版权
+
+`assets/aigc-badge.png` 来自用户指定的[高达官方图片](https://gundam-official.com/media/UC_0b76f920b8/UC_0b76f920b8.png)，保留第三方权利，**不适用仓库 MIT 许可证**。对外分发前确认使用权限，或替换为有权使用的标识。标识不代表官方背书。
+
+## 官方语法参考
+
+[Marpit Theme CSS](https://marpit.marp.app/theme-css) · [Directives](https://marpit.marp.app/directives) · [Fragments](https://marpit.marp.app/fragmented-list) · [Obsidian Callouts](https://help.obsidian.md/callouts) · [Marp functional engine](https://github.com/marp-team/marp-cli#functional-engine)

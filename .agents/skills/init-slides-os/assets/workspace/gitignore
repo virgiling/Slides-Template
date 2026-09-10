@@ -1,0 +1,32 @@
+# Independent template repository (clone/manage separately)
+/template/
+
+# Build products and dependencies
+build/
+node_modules/
+.cache/
+*.log
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdv
+
+# Private state and credentials
+.claude/
+.pi/
+sessions/
+logs/
+.env
+.env.*
+*.sqlite
+*.sqlite-*
+*.db
+.DS_Store
