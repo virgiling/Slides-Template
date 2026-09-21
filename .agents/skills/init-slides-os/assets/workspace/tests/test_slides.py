@@ -117,7 +117,8 @@ output.write_text('%PDF-stub' if output.suffix == '.pdf' else '<!doctype html>')
             talk = self.create(name=kind, kind=kind)
             for excluded in (".claude", "node_modules", "build", "README.md", "package.json", "scripts", "tests"):
                 self.assertFalse((talk / excluded).exists(), excluded)
-            policy = (talk / "AGENT.md").read_text()
+            self.assertEqual([path.name for path in talk.glob("AGENT*.md")], ["AGENTS.md"])
+            policy = (talk / "AGENTS.md").read_text()
             for phrase in ("visual models", "browser tools", "APIs", "English", "single-line", "rebase", "Permanent", "squash", "one final commit"):
                 self.assertIn(phrase, policy)
             self.assertEqual((talk / ".gitignore").read_bytes(), (self.root / "template/.gitignore").read_bytes())
@@ -153,7 +154,7 @@ output.write_text('%PDF-stub' if output.suffix == '.pdf' else '<!doctype html>')
         self.command("clean-all")
         for name in ("formal", "simple"):
             self.assertFalse((self.root / name / "build").exists())
-            self.assertTrue((self.root / name / "AGENT.md").exists())
+            self.assertTrue((self.root / name / "AGENTS.md").exists())
 
     def test_rejects_invalid_names_types_and_existing_content(self):
         for name in ("../escape", "template", "scripts", "tests", "bad name", "-bad", ".hidden"):

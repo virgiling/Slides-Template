@@ -6,7 +6,8 @@ These permanent rules apply to this workspace and generated talk instructions. C
 
 - Work on `main` unless the user requests otherwise. `template/` is an independent Git repository; never stage the nested checkout or personal talks incidentally.
 - Formal talks use native LaTeX/Beamer (`main.tex` → Tectonic → PDF). Informal talks use Marp (`slides.md` + `theme.css` → HTML/PDF). Do not change a talk's format or force common Markdown sources without asking.
-- Before using a template, read `template/AGENT.md`, then its `latex/AGENT.md` or `marp/AGENT.md` and README.
+- Before editing a talk or template subdirectory, read its `AGENTS.md`; sessions started at the workspace root may not automatically load child instructions.
+- Before using a template, read `template/AGENTS.md`, then its `latex/AGENTS.md` or `marp/AGENTS.md` and README.
 - Keep format directories and talks free of runtime scripts/dependencies/tests. Shared maintenance sources live in outer `scripts/`, `tests/`, Makefile and the root Node manifest/lockfile.
 - The reviewed snapshot under `template/.agents/skills/init-slides-os/assets/` is the distribution exception: it bootstraps a standalone clone into its parent workspace, without installed dependencies, private state or destructive overwrites. After changing distributed sources, run `python3 scripts/package-bootstrap.py`; `--check` and bootstrap tests must pass. Never hand-edit snapshot copies.
 - Keep usage docs in `template/docs/` (setup, customization, terminal), not duplicated research/test diaries. Canonical skills live in `template/.agents/skills/<name>/SKILL.md`; bootstrap installs only the lightweight `make-marp-slides` outer entry point. Keep `init-slides-os` inside the template repository, not in the everyday workspace skill list.

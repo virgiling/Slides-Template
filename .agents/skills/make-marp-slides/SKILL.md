@@ -7,7 +7,7 @@ description: Turn a specified snippet from lecture notes into concise Marp slide
 
 只处理用户给定的讲义片段，输出可插入现有 Marp 报告的 Markdown 页面片段。**不要生成整份讲义，不加封面或结束页，不输出 frontmatter 或额外元数据。**
 
-先读[Marp 规则](../../../marp/AGENT.md)与[写作说明](../../../marp/README.md)。本 skill 的相对路径均以本文件所在目录为基准。工具未就绪时参考 [init-slides-os](../init-slides-os/SKILL.md)，但不要为单纯写作任务无条件安装工具。
+先读[Marp 规则](../../../marp/AGENTS.md)与[写作说明](../../../marp/README.md)。本 skill 的相对路径均以本文件所在目录为基准。工具未就绪时参考 [init-slides-os](../init-slides-os/SKILL.md)，但不要为单纯写作任务无条件安装工具。
 
 ## 输入与输出约定
 

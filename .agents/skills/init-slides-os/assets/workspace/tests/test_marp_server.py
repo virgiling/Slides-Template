@@ -59,7 +59,7 @@ class MarpServerTests(unittest.TestCase):
             # Synthetic fixtures only: no real private files are read or requested.
             (project / '.claude').mkdir()
             (project / '.claude/secret.md').write_text('PRIVATE_SENTINEL')
-            (project / 'AGENT.md').write_text('PRIVATE_SENTINEL')
+            (project / 'AGENTS.md').write_text('PRIVATE_SENTINEL')
             (project / 'private.db').write_text('PRIVATE_SENTINEL')
             with socket.socket() as sock:
                 sock.bind(('127.0.0.1', 0))
@@ -110,7 +110,7 @@ class MarpServerTests(unittest.TestCase):
                 self.assertIn('ASSET_INITIAL', request('/assets/figure.svg'))
                 with urlopen(base + '/assets/aigc-badge.png', timeout=3) as response:
                     self.assertEqual(response.read(), badge)
-                for path in ('/.claude/secret.md', '/private.db', '/AGENT.md', '/marp-engine.cjs'):
+                for path in ('/.claude/secret.md', '/private.db', '/AGENTS.md', '/marp-engine.cjs'):
                     with self.assertRaises(HTTPError) as error:
                         request(path)
                     self.assertIn(error.exception.code, (403, 404))

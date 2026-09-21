@@ -1,8 +1,8 @@
-# AGENT.md
+# AGENTS.md
 
 ## Scope
 
-Read `../AGENT.md` first. Maintain the reusable Beamer class, its self-contained example, and the Zed build task in this directory. This is the formal PDF track; use `../marp/` for Markdown-first informal talks.
+Read `../AGENTS.md` first. Maintain the reusable Beamer class, its self-contained example, and the Zed build task in this directory. This is the formal PDF track; use `../marp/` for Markdown-first informal talks.
 
 For a new talk, use the outer workspace's `make new NAME=<name> TYPE=latex` when available. Otherwise copy only `example.tex` (as `main.tex`), `virgiling-slides.cls`, `references.bib`, and the root `../.gitignore` and `../LICENSE.txt` into a fresh talk directory. Customize metadata and frames there; never overwrite the reusable example with a personal talk.
 

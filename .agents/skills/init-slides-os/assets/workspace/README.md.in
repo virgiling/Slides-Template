@@ -47,6 +47,6 @@ TTYD_TEST=1 bun run check                 # 可选真实终端，隔离的合成
 SLIDES_TEST_BOOTSTRAP=1 make test          # 可选全新初始化、安装依赖、真实 HTML 编译
 ```
 
-`make thumbnails [TYPE=latex|marp]` 重建真实封面；`MARP_TEST_PDF=1 make test` 进行可选 PDF 布局检查。日常测试不调用浏览器工具或视觉模型，外观由人确认。永久规则见 [AGENT.md](AGENT.md)。
+`make thumbnails [TYPE=latex|marp]` 重建真实封面；`MARP_TEST_PDF=1 make test` 进行可选 PDF 布局检查。日常测试不调用浏览器工具或视觉模型，外观由人确认。永久规则见 [AGENTS.md](AGENTS.md)。
 
 两个仓库独立管理；不要暂存个人讲稿、依赖、会话或构建输出，不自动提交或发布。

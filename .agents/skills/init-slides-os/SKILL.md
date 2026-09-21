@@ -7,7 +7,7 @@ description: Initialize a usable LaTeX/Marp slides workspace from a standalone S
 
 将模板克隆初始化成可运行的工作区，不是安装新操作系统，也不生成讲稿内容。
 
-先完整阅读[模板规则](../../../AGENT.md)与[安装指南](../../../docs/setup.md)；字体问题再读[字体指南](../../../docs/customization.md)。相对路径均以本 SKILL.md 所在目录为基准，不以当前工作目录为基准。
+先完整阅读[模板规则](../../../AGENTS.md)与[安装指南](../../../docs/setup.md)；字体问题再读[字体指南](../../../docs/customization.md)。相对路径均以本 SKILL.md 所在目录为基准，不以当前工作目录为基准。
 
 ## 1. 确认目标与权限
 

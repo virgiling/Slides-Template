@@ -14,15 +14,15 @@
       "mode": 420
     },
     {
-      "path": "AGENT.md",
-      "asset": "workspace/AGENT.md.in",
-      "sha256": "ff1f072412aeb3c9e49266fd2b24de91320765a31afc9f6e1dc6cb09ef91ffc9",
+      "path": "AGENTS.md",
+      "asset": "workspace/AGENTS.md.in",
+      "sha256": "c7c0e1ee030048cabcf2d656f64752d075e4792f4feb6258f3b66dbb04eb50c7",
       "mode": 420
     },
     {
       "path": "README.md",
       "asset": "workspace/README.md.in",
-      "sha256": "5c8e1ec3a305c759773a6c97c6b44dbb489257a9ac8f8e44d2a4b5cb0b7b9cde",
+      "sha256": "5ceb656c63e201de628667b0f3da7a20fe2f2090e30fb67912eee1a29883fe17",
       "mode": 420
     },
     {
@@ -46,7 +46,7 @@
     {
       "path": "scripts/slides",
       "asset": "workspace/scripts/slides",
-      "sha256": "8fafbad57f11a50c76800f5a0ae9d2c46e8e83d3e160d9f90ae3e72f7ad03940",
+      "sha256": "04952fc73ae124b37a48584aecabb889ed7cffc10946380d6f16bce2c32be9c0",
       "mode": 493
     },
     {
@@ -124,7 +124,7 @@
     {
       "path": "scripts/package-bootstrap.py",
       "asset": "workspace/scripts/package-bootstrap.py",
-      "sha256": "42760063639f4bc4122ae09b3a93a300c5b791bbf9ba1afbfbe9405fda2ee26e",
+      "sha256": "f613ac8289511cc927e2d24fb2ad08550f7827f67bda652838608bc3282dc778",
       "mode": 420
     },
     {
@@ -148,13 +148,13 @@
     {
       "path": "tests/test_slides.py",
       "asset": "workspace/tests/test_slides.py",
-      "sha256": "d66e4591a8648bf2520296ce24c84de76640e88f3f1748af9a17d7bb7f143309",
+      "sha256": "f246d9d40098da4c793f925abce8348644603992a086dce4f4213e87b7e4cc43",
       "mode": 420
     },
     {
       "path": "tests/test_marp_server.py",
       "asset": "workspace/tests/test_marp_server.py",
-      "sha256": "b246f818d8c15d3d65f604d86ad62fa126a04898d5f9a4d110c2c006a9697ed4",
+      "sha256": "a2f99482cbed409a50ef227fe874083edd4c07b6f6038ead5c51bc6f0905626c",
       "mode": 420
     },
     {
@@ -166,7 +166,7 @@
     {
       "path": "tests/test_bootstrap.py",
       "asset": "workspace/tests/test_bootstrap.py",
-      "sha256": "15d67d9bf26e2e682c1a8088b2b346b479ecd7c10207969eae1c74bbbfc1a625",
+      "sha256": "40791f361458ca1ee6cc4f952a7e66194338c043642a18556750f6f24d582868",
       "mode": 420
     }
   ]

@@ -4,8 +4,8 @@
 
 This is an independent template Git repository, not a collection of talks.
 
-- `latex/`: formal Beamer/PDF slides. Read `latex/AGENT.md` and `latex/README.md` before using or changing it.
-- `marp/`: a reusable CSS theme plus a Markdown example for informal talks. Read `marp/AGENT.md` and `marp/README.md` before using or changing it.
+- `latex/`: formal Beamer/PDF slides. Read `latex/AGENTS.md` and `latex/README.md` before using or changing it.
+- `marp/`: a reusable CSS theme plus a Markdown example for informal talks. Read `marp/AGENTS.md` and `marp/README.md` before using or changing it.
 - Read `README.md` to choose a template. Do not force Markdown-to-LaTeX conversion or change a talk's format without asking.
 - Initialize a standalone clone at <workspace>/template with .agents/skills/init-slides-os/scripts/init_workspace.py. Its reviewed source resources create the surrounding ../scripts/slides and ../Makefile without overwrites, installs or Git operations. Preserve this runtime boundary.
 - docs/ contains only operational guides: setup, customization and terminal use. .agents/skills/ contains init-slides-os and make-marp-slides in standard <name>/SKILL.md directories. Keep historical investigations/test diaries out of user guides.
@@ -16,7 +16,7 @@ This is an independent template Git repository, not a collection of talks.
 - Each template README must show a local thumbnail and runnable commands. Keep the root routing table and previews synchronized.
 - `thumbnail.png` must show the actual compiled cover. Never replace it with a drawn illustration. Use the outer workspace's `make thumbnails`, or native PDF/Marp first-page export.
 - No runtime scripts/, node_modules, tests or application scaffolds in the format directories or repository root. The explicit exception is the init-slides-os skill's scripts/ and reviewed assets/ source snapshot, needed to bootstrap a clone without a private companion repo. Keep installed dependencies and runtime tools in the outer workspace. Refresh assets from outer maintenance sources with python3 scripts/package-bootstrap.py; do not hand-edit generated resource copies.
-- The Marp example uses the outer official functional-engine extension for callouts, native MathML and key aliases. Explain that vanilla Marp only renders base CSS, while the included bootstrap supplies all tools for the enhanced example. All AI-generated Marp slide content must be framed in `> [!aigc]` / `.callout.aigc`; see marp/AGENT.md. The third-party badge is not covered by the MIT license.
+- The Marp example uses the outer official functional-engine extension for callouts, native MathML and key aliases. Explain that vanilla Marp only renders base CSS, while the included bootstrap supplies all tools for the enhanced example. All AI-generated Marp slide content must be framed in `> [!aigc]` / `.callout.aigc`; see marp/AGENTS.md. The third-party badge is not covered by the MIT license.
 - Runtime artifacts belong in ignored `build/`; checked-in cover PNGs are the intentional documentation exception.
 - Never read or copy sessions, `.claude/`, `.pi/`, private logs, databases, credentials, or environment files. Copy only explicit source-file allowlists into new talks, not entire directories.
 - Do not read private build outputs from unrelated projects. Logs created by the current compile may be checked for errors.

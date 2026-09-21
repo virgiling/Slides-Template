@@ -101,7 +101,7 @@ footer: 'Your Name · Group Seminar'
 
 底部蓝带左侧为 `footer`，右侧为当前页/总页数，没有顶部色带。封面可用 `<!-- _paginate: false -->` 隐藏页码，但仍计入总页数。
 
-已有报告不会自动更新：按需合并 `theme.css` 与素材，不覆盖 `slides.md`。模板维护/验证规则见 [AGENT.md](AGENT.md)。
+已有报告不会自动更新：按需合并 `theme.css` 与素材，不覆盖 `slides.md`。模板维护/验证规则见 [AGENTS.md](AGENTS.md)。
 
 ## 素材版权
 

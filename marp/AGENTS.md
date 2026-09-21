@@ -1,6 +1,6 @@
 # Marp Theme Instructions
 
-Read `../AGENT.md` and this directory's `README.md` first. These rules apply to all future work in this directory.
+Read `../AGENTS.md` and this directory's `README.md` first. These rules apply to all future work in this directory.
 
 ## Reusable theme and shared extensions
 

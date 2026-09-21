@@ -18,11 +18,11 @@ spec = importlib.util.spec_from_file_location('bootstrap_package', ROOT / 'scrip
 packer = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(packer)
 TEMPLATE_FILES = (
-    '.gitignore', 'LICENSE.txt', 'AGENT.md', 'README.md',
+    '.gitignore', 'LICENSE.txt', 'AGENTS.md', 'README.md',
     'docs/setup.md', 'docs/customization.md', 'docs/terminal.md',
-    'latex/AGENT.md', 'latex/README.md', 'latex/example.tex', 'latex/virgiling-slides.cls',
+    'latex/AGENTS.md', 'latex/README.md', 'latex/example.tex', 'latex/virgiling-slides.cls',
     'latex/references.bib', 'latex/thumbnail.png', 'latex/.zed/tasks.json',
-    'marp/AGENT.md', 'marp/README.md', 'marp/example.md', 'marp/theme.css', 'marp/thumbnail.png',
+    'marp/AGENTS.md', 'marp/README.md', 'marp/example.md', 'marp/theme.css', 'marp/thumbnail.png',
     'marp/assets/workflow.svg', 'marp/assets/aigc-badge.png',
     f'{SKILL}/SKILL.md', INIT, '.agents/skills/make-marp-slides/SKILL.md', f'{ASSETS}/manifest.json',
 )
@@ -77,6 +77,9 @@ class BootstrapTests(unittest.TestCase):
         self.run_command(['make', 'new', 'NAME=demo', 'TYPE=marp'])
         self.assertTrue((self.root / 'demo/slides.md').is_file())
         self.assertFalse((self.root / 'demo/scripts').exists())
+        for directory in (self.root, self.template, self.template / 'latex', self.template / 'marp', self.root / 'demo'):
+            self.assertEqual([path.name for path in directory.glob('AGENT*.md')], ['AGENTS.md'])
+        self.assertEqual((self.root / 'AGENTS.md').read_bytes(), (ROOT / 'AGENTS.md').read_bytes())
         result = self.initialize()
         self.assertIn('Created 0 files', result.stdout)
         wrapper = self.root / '.agents/skills/make-marp-slides/SKILL.md'

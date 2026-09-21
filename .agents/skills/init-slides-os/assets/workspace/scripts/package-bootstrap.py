@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'template/.agents/skills/init-slides-os/assets'
 # One reviewed allowlist: no whole-workspace copies, dependencies, fonts, talks or build outputs.
 FILES = (
-    '.gitignore', '.zed/tasks.json', 'AGENT.md', 'README.md', 'Makefile', 'package.json', 'bun.lock',
+    '.gitignore', '.zed/tasks.json', 'AGENTS.md', 'README.md', 'Makefile', 'package.json', 'bun.lock',
     'scripts/slides', 'scripts/copy-assets.cjs', 'scripts/marp-engine.cjs',
     'scripts/presentation-keys.cjs', 'scripts/marp-loopback.cjs', 'scripts/serve-marp.py',
     'scripts/preview-proxy.cjs', 'scripts/preview.html', 'scripts/preview-drawer.mjs',
@@ -24,7 +24,7 @@ FILES = (
 
 
 def asset_name(relative):
-    names = {'.gitignore': 'gitignore', 'AGENT.md': 'AGENT.md.in', 'README.md': 'README.md.in'}
+    names = {'.gitignore': 'gitignore', 'AGENTS.md': 'AGENTS.md.in', 'README.md': 'README.md.in'}
     return 'workspace/' + names.get(relative, relative)
 
 

@@ -45,7 +45,7 @@ accessing absolute path ... build may not be reproducible
 ```text
 template/latex/
 ├── .zed/tasks.json       # Zed 编译任务
-├── AGENT.md              # 模板维护约束
+├── AGENTS.md             # 模板维护约束
 ├── README.md             # 使用说明
 ├── example.tex           # 完整功能示例
 ├── references.bib        # 示例参考文献库
@@ -59,7 +59,7 @@ template/latex/
 
 需要统一 Make/Zed 命令时，先按[初始化指南](../docs/setup.md)从本仓库生成外层 `slides/` 工作区；只编译 LaTeX 可跳过初始化，直接使用下方 Tectonic 命令，不需要 Node/Bun。工作区中运行 `make new NAME=my-talk TYPE=latex`（默认类型也是 `latex`）。新报告独立维护 `main.tex`，不会自动跟随模板更新。单独使用此仓库时，只复制 `example.tex`（改名为 `main.tex`）、`virgiling-slides.cls`、`references.bib` 及根目录的 `.gitignore`、`LICENSE.txt`。
 
-AI 使用前应依次阅读 `../AGENT.md` 和本目录 `AGENT.md`。默认只做编译和 CLI/API 检查，不调用浏览器工具或视觉模型；外观问题由人反馈。
+AI 使用前应依次阅读 `../AGENTS.md` 和本目录 `AGENTS.md`。默认只做编译和 CLI/API 检查，不调用浏览器工具或视觉模型；外观问题由人反馈。
 
 
 ## Zed

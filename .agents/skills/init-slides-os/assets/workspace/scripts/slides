@@ -184,14 +184,14 @@ list_projects() {
 }
 
 write_project_instructions() {
-  cat > "$destination/AGENT.md" <<EOF
+  cat > "$destination/AGENTS.md" <<EOF
 # Slide Project Instructions
 
 This is an independent $kind talk copied from template/$kind. Edit $entry here,
 not the reusable template. Assets belong in figures/ (LaTeX) or assets/ (Marp).
 The original workspace supports make build SLIDE=$name and make clean SLIDE=$name.
 EOF
-  cat >> "$destination/AGENT.md" <<'EOF'
+  cat >> "$destination/AGENTS.md" <<'EOF'
 
 ## Permanent rules (apply to future tasks too)
 
@@ -206,10 +206,10 @@ EOF
 - Never read/copy sessions, private logs, databases, credentials, .env, .claude/, or .pi/.
 - Stage explicit source/docs paths only. Put outputs in build/; never commit build/ or node_modules/.
 - Clean up task-created temporary files without deleting pre-existing outputs.
-- Keep these rules in every child AGENT.md. Update instructions and docs when the workflow changes.
+- Keep these rules in every child AGENTS.md. Update instructions and docs when the workflow changes.
 EOF
   if [ "$kind" = latex ]; then
-    cat >> "$destination/AGENT.md" <<'EOF'
+    cat >> "$destination/AGENTS.md" <<'EOF'
 
 ## LaTeX commands
 
@@ -223,7 +223,7 @@ Check that build/main.pdf exists and inspect only this compilation's diagnostics
 PDF text, and fonts via CLI tools. No browser or visual inspection is required.
 EOF
   else
-    cat >> "$destination/AGENT.md" <<'EOF'
+    cat >> "$destination/AGENTS.md" <<'EOF'
 
 ## Marp commands
 
