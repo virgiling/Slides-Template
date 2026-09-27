@@ -176,11 +176,17 @@ test('asset packaging excludes hidden/private files and removes stale assets', (
     const assets = path.join(temp, 'assets');
     fs.mkdirSync(path.join(assets, '.private'), { recursive: true });
     fs.writeFileSync(path.join(assets, 'visible.svg'), '<svg/>');
+    const html = '<!doctype html><h1>Public design document</h1>';
+    fs.writeFileSync(path.join(assets, 'design.html'), html);
+    fs.writeFileSync(path.join(assets, '.private/hidden.html'), 'synthetic sentinel');
+    fs.writeFileSync(path.join(temp, 'private.html'), 'synthetic sentinel');
     fs.writeFileSync(path.join(assets, '.private/hidden.svg'), 'synthetic sentinel');
     fs.writeFileSync(path.join(assets, 'private.db'), 'synthetic sentinel');
     const output = path.join(temp, 'build');
     copyAssets(temp, output);
-    assert.deepEqual(fs.readdirSync(path.join(output, 'assets')), ['visible.svg']);
+    assert.deepEqual(fs.readdirSync(path.join(output, 'assets')).sort(), ['design.html', 'visible.svg']);
+    assert.equal(fs.readFileSync(path.join(output, 'assets/design.html'), 'utf8'), html);
+    assert.ok(!fs.existsSync(path.join(output, 'private.html')));
     fs.unlinkSync(path.join(assets, 'visible.svg'));
     copyAssets(temp, output);
     assert.ok(!fs.existsSync(path.join(output, 'assets/visible.svg')));

@@ -196,7 +196,25 @@ async function startPreview({ port, marpPort, session = '', entry, cwd = process
           'cache-control': 'no-store', 'x-content-type-options': 'nosniff' });
         return res.end(req.method === 'HEAD' ? undefined : files.get(name));
       }
+      // Resolve iframe-relative links before routing assets or forwarding to Marp.
       const requestPath = req.url.startsWith('/__slides__/') ? req.url.slice('/__slides__'.length) : req.url;
+      const assetPath = new URL(requestPath, `http://${req.headers.host}`).pathname;
+      // Markdown under assets/ is a source document, not a deck: serve it as plain text.
+      // The proxy runs with the public mirror as its cwd, so decode inside assets/ only.
+      if (/^\/assets\/.+\.(md|markdown)$/i.test(assetPath)) {
+        const mirror = process.cwd();
+        const root = path.join(mirror, 'assets');
+        let file;
+        try { file = path.resolve(mirror, decodeURIComponent(assetPath).replace(/^\/+/, '')); } catch { file = null; }
+        if (file && file.startsWith(root + path.sep) && fs.existsSync(file)) {
+          const stat = fs.lstatSync(file);
+          if (stat.isFile() && !stat.isSymbolicLink()) {
+            res.writeHead(200, { 'content-type': 'text/plain; charset=utf-8',
+              'cache-control': 'no-store', 'x-content-type-options': 'nosniff' });
+            return res.end(req.method === 'HEAD' ? undefined : fs.readFileSync(file));
+          }
+        }
+      }
       proxyHTTP(req, res, marpPort, { requestPath });
     }, (req, socket, head) => {
       if (!allowedRequest(req, port) || !origins(port).includes(req.headers.origin) ||

@@ -2,8 +2,8 @@
 
 正式报告用 LaTeX/Beamer，轻量分享用 Marp。模板是独立的 `template/` Git 仓库；共享工具和依赖运行在本工作区，每份讲稿只有源码与素材。
 
-| LaTeX | Marp |
-| --- | --- |
+| LaTeX                                                                   | Marp                                                                 |
+| ----------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | [![LaTeX 封面](template/latex/thumbnail.png)](template/latex/README.md) | [![Marp 封面](template/marp/thumbnail.png)](template/marp/README.md) |
 
 ## 快速操作

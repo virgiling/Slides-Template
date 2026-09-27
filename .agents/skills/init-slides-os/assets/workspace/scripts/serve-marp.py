@@ -11,7 +11,7 @@ import subprocess
 import tempfile
 import time
 
-PUBLIC_ASSETS = {".svg", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".pdf", ".mp4", ".webm"}
+PUBLIC_ASSETS = {".svg", ".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".pdf", ".mp4", ".webm", ".md", ".html"}
 
 
 def source_files(project: Path, entry: str) -> list[Path]:

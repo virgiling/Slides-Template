@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const publicExtensions = new Set(['.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif', '.pdf', '.mp4', '.webm']);
+const publicExtensions = new Set(['.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif', '.pdf', '.mp4', '.webm', '.md', '.html']);
 
 // Marp preserves image URLs; copy only public assets next to the HTML output.
 function copyAssets(root, output) {

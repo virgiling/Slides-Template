@@ -22,7 +22,7 @@
     {
       "path": "README.md",
       "asset": "workspace/README.md.in",
-      "sha256": "5ceb656c63e201de628667b0f3da7a20fe2f2090e30fb67912eee1a29883fe17",
+      "sha256": "e30194ecbb9fd4f8bb2464b57950471e959f744c82c3b6cb5590241043c4b7e0",
       "mode": 420
     },
     {
@@ -52,7 +52,7 @@
     {
       "path": "scripts/copy-assets.cjs",
       "asset": "workspace/scripts/copy-assets.cjs",
-      "sha256": "748dd730393b239e6bc0bc28f361fc5b19ff91bde13735d6676c46d8cfed8aa3",
+      "sha256": "8951526d723b89752b4e8042fed46a8c0dbfaf06ea33bdabc6649709eb7e146b",
       "mode": 420
     },
     {
@@ -76,13 +76,13 @@
     {
       "path": "scripts/serve-marp.py",
       "asset": "workspace/scripts/serve-marp.py",
-      "sha256": "fe88bec3557aa806f737868732e426e448429f5f38fbce25e279ce32d0ab0d41",
+      "sha256": "9b56dfb050b05258b70ae871d886cabc866f5426781e40614bcad59451cbbe10",
       "mode": 420
     },
     {
       "path": "scripts/preview-proxy.cjs",
       "asset": "workspace/scripts/preview-proxy.cjs",
-      "sha256": "5e4dd56c919f60032ac11be2526335325068418444f03ecee6c01f78ee26a23e",
+      "sha256": "16a592497036d4f1d206294289514e6047dd0aa46c35eb37562f53dc0d238964",
       "mode": 420
     },
     {
@@ -130,7 +130,7 @@
     {
       "path": "tests/render.test.cjs",
       "asset": "workspace/tests/render.test.cjs",
-      "sha256": "114e7bfaebb7518a231beb4f8f2873811106c89c4a7c088b29d1dd2d3d14fea2",
+      "sha256": "b967766ee77614e35c52016572393b7e2285c693c24ba989694ef23a3db9cd69",
       "mode": 420
     },
     {
@@ -154,7 +154,7 @@
     {
       "path": "tests/test_marp_server.py",
       "asset": "workspace/tests/test_marp_server.py",
-      "sha256": "a2f99482cbed409a50ef227fe874083edd4c07b6f6038ead5c51bc6f0905626c",
+      "sha256": "0eb59d7b7b263d6ef6d5531aec963f01cc7683d3779ca43e11a5839ac6540b8a",
       "mode": 420
     },
     {

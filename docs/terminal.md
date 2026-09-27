@@ -58,6 +58,7 @@ zellij attach slides
 - TCP 仅监听 loopback，ttyd 使用私有 Unix socket；预览通过一次性引导能力、HttpOnly Cookie 和 Host/Origin 检查自动授权。
 - 原生本机进程视为可信；不要公开转发/反向代理端口，不要把包含连接信息的预览页面分享出去。
 - 只向 HTTP 服务复制选中报告的公开 Markdown、theme 和素材，不挂载整个私有目录。演讲备注也属于可能公开的报告内容。
+- `assets/` 下的 `.md` 在预览中显示原文，`.html` 作为独立网页访问；两者都会随构建复制。HTML 可以运行自身脚本，只放入可信、可公开的文档（不要包含凭据或终端连接信息）。讲稿内相对链接无需添加 `/__slides__/` 前缀。
 - 导出 HTML/PDF/PNG 不含终端、连接信息或预览 UI；正式分享使用 `make build` 的输出。
 - 不读取用户历史、凭据、Agent 配置或会话文件；不自动停止用户会话。无需改 Ghostty、fish 或 Agent 的全局配置。
 

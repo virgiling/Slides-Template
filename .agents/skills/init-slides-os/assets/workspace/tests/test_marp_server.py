@@ -56,6 +56,10 @@ class MarpServerTests(unittest.TestCase):
             badge = (ROOT / 'template/marp/assets/aigc-badge.png').read_bytes()
             (project / 'assets/aigc-badge.png').write_bytes(badge)
             (project / 'assets/figure.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg"><title>ASSET_INITIAL</title></svg>')
+            (project / 'assets/notes.md').write_text('# ASSET_MARKDOWN')
+            html_asset = '<!doctype html><html><body><h1>ASSET_HTML</h1></body></html>'
+            (project / 'assets/design.html').write_text(html_asset)
+            (project / 'private.html').write_text('PRIVATE_SENTINEL')
             # Synthetic fixtures only: no real private files are read or requested.
             (project / '.claude').mkdir()
             (project / '.claude/secret.md').write_text('PRIVATE_SENTINEL')
@@ -108,9 +112,20 @@ class MarpServerTests(unittest.TestCase):
                 self.assertIn('<math ', body)
                 self.assertIn('data-slide-key-aliases', body)
                 self.assertIn('ASSET_INITIAL', request('/assets/figure.svg'))
+                for asset_path in ('/assets/notes.md', '/__slides__/assets/notes.md'):
+                    with self.subTest(asset_path=asset_path):
+                        with urlopen(base + asset_path, timeout=3) as markdown:
+                            self.assertEqual(markdown.headers.get_content_type(), 'text/plain',
+                                             'markdown assets stay source documents, not rendered decks')
+                            self.assertEqual('# ASSET_MARKDOWN', markdown.read().decode('utf-8'))
+                for asset_path in ('/assets/design.html', '/__slides__/assets/design.html'):
+                    with self.subTest(asset_path=asset_path):
+                        with urlopen(base + asset_path, timeout=3) as response:
+                            self.assertEqual(response.headers.get_content_type(), 'text/html')
+                            self.assertEqual(response.read().decode('utf-8'), html_asset)
                 with urlopen(base + '/assets/aigc-badge.png', timeout=3) as response:
                     self.assertEqual(response.read(), badge)
-                for path in ('/.claude/secret.md', '/private.db', '/AGENTS.md', '/marp-engine.cjs'):
+                for path in ('/.claude/secret.md', '/private.db', '/private.html', '/__slides__/private.html', '/AGENTS.md', '/marp-engine.cjs'):
                     with self.assertRaises(HTTPError) as error:
                         request(path)
                     self.assertIn(error.exception.code, (403, 404))
